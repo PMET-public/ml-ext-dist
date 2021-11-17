@@ -1,0 +1,37 @@
+{
+  "terms": [
+    "turner tech",
+    "turner demo",
+    "turner webinar",
+    "turner event",
+    "turner blog",
+    "cloud storage",
+    "cloud backup",
+    "cloud management",
+    "data protection",
+    "data compliance"
+  ],
+  "campaigns": [
+    "Data Protection",
+    "HIPPA Data Compliance",
+    "Cloud Backup",
+    "Cloud Storage",
+    "Virtualized Backup",
+    "Hybrid Cloud Backup",
+    "Data Continuity",
+    "Instant Data Recovery"
+  ],
+  "mediums": [
+    "CPC",
+    "CPM",
+    "CPA"
+  ],
+  "sources": [
+    "Demand-Side Platform",
+    "Facebook Lead Ads",
+    "Facebook News Feed Ads",
+    "Google AdWords",
+    "Google Display Ads",
+    "LinkedIn Lead Ads"
+  ]
+}
