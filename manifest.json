@@ -5,7 +5,7 @@
   "author": "Marketo Demo Services",
   "name": "MarketoLive",
   "description": "This extension is for Marketo employees and partners who have access to the MarketoLive demo environment.",
-  "version": "5.4.10",
+  "version": "5.4.11",
   "background": {
     "persistent": true,
     "scripts": [
