@@ -2890,7 +2890,7 @@ var LIB = {
     }
     LIB.addTrackerToHomeTileById(deliverabilityToolsTile ? deliverabilityToolsTile.id : 'deliverabilityToolsTile', 'Deliverability Tools')
 
-    if (MktPage.savedState.custPrefix == LIB.mktoAccountString106 || true) {
+    if (MktPage.savedState.custPrefix == LIB.mktoAccountString106) {
       // this is what the button used to use
       // <img src="https://www.bizible.com/hs-fs/hub/233537/file-2495819411-png/bizible-logo-retina.png?t=1533581965699&amp;width=277&amp;name=bizible-logo-retina.png" style="width: 145px;margin-left:5px;margin-top:30px;">
       LIB.appendHomeTile('bizibleDiscoverToolsTile', '', LIB.mktoBizibleDiscoverLink, 'Bizible Discover')
