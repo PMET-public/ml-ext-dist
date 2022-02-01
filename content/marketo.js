@@ -1,6 +1,6 @@
-/*
-This file is the combined output of multiple src files. Do not edit it directly.
-*/
+// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
+window.MARKETO_EXT_VERSION = 'v5.4.15'; // version also automatically injected via gulp using manifest.json
+
 isExtDevMode = true
 // catch all for globally defined functions used by any file
 
@@ -3120,7 +3120,7 @@ var LIB = {
 
 }
 LIB.interceptXHR()
-console.log('Marketo > Running')
+console.log('Marketo > Running', MARKETO_EXT_VERSION)
 let ANALYZER_NAV_BAR = 'https://marketolive.com/m3/pluginv3/html/analyzer-nav-bar.html',
   mktoAppDomain = '^(https://app-[a-z0-9]+.marketo.com|https://engage-(ab|sj).marketo.com)',
   mktoLoginDomain = '^(https://login.marketo.com|https://app.marketo.com)',

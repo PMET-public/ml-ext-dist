@@ -1,6 +1,6 @@
-/*
-This file is the combined output of multiple src files. Do not edit it directly.
-*/
+// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
+window.MARKETO_EXT_VERSION = 'v5.4.15'; // version also automatically injected via gulp using manifest.json
+
 isExtDevMode = true
 // catch all for globally defined functions used by any file
 
@@ -3120,7 +3120,7 @@ var LIB = {
 
 }
 LIB.interceptXHR()
-console.log('Marketo Other App > Running')
+console.log('Marketo Other App > Running', MARKETO_EXT_VERSION)
 /**************************************************************************************
  *  This script contains all of the functionality needed for the tracking and
  *  manipulation of the Marketo's other apps (e.g. Email Insights, Web Personalization,
@@ -3153,7 +3153,7 @@ APP.waitForHeap = function (callback) {
       window.clearInterval(isHeapAnalytics)
       callback()
     }
-  })
+  }, 0)
 }
 
 /**************************************************************************************
@@ -3165,7 +3165,7 @@ APP.waitForHeap = function (callback) {
 APP.heapEventProps = function (props) {
   APP.waitForHeap(function () {
     heap.addEventProperties(props)
-    console.log('Marketo Other App > Adding: Heap Event Properties: ' + JSON.stringify(props, null, 2))
+    console.log('Marketo Other App > Adding: Heap Event Properties: ', props)
   })
 }
 
@@ -3181,13 +3181,11 @@ APP.heapIdentify = function () {
       let oktaEmail = LIB.getCookie('okta_email'),
         oktaFirstName = LIB.getCookie('okta_first_name'),
         oktaLastName = LIB.getCookie('okta_last_name')
-
       if (userId) {
         console.log('Marketo Other App > Heap Analytics ID: ' + userId)
         heap.identify(userId)
       } else {
         let mktoUserId = LIB.getCookie('mkto_user_id')
-
         if (mktoUserId) {
           console.log('Marketo Other App > Heap Analytics ID: ' + mktoUserId)
           heap.identify(mktoUserId)
@@ -3195,93 +3193,53 @@ APP.heapIdentify = function () {
       }
 
       if (oktaFirstName && oktaLastName) {
-        heap.addUserProperties({
-          Name: oktaFirstName + ' ' + oktaLastName
-        })
+        heap.addUserProperties({ Name: oktaFirstName + ' ' + oktaLastName })
       } else if (userName) {
-        heap.addUserProperties({
-          Name: userName.replace(/ ?\[[^\]]+\]/, '')
-        })
+        heap.addUserProperties({ Name: userName.replace(/ ?\[[^\]]+\]/, '') })
       } else {
         let mktoName = LIB.getCookie('mkto_name')
-
         if (mktoName) {
-          heap.addUserProperties({
-            Name: mktoName
-          })
+          heap.addUserProperties({ Name: mktoName })
         }
       }
 
       if (roleSubstring && roleSubstring != -1) {
-        heap.addUserProperties({
-          Role: userName.substring(roleSubstring).replace(/^\[([^\]]+)]$/, '$1')
-        })
+        heap.addUserProperties({ Role: userName.substring(roleSubstring).replace(/^\[([^\]]+)]$/, '$1') })
       } else {
         let mktoRole = LIB.getCookie('mkto_role')
-
         if (mktoRole) {
-          heap.addUserProperties({
-            Role: mktoRole
-          })
+          heap.addUserProperties({ Role: mktoRole })
         }
       }
 
       if (oktaEmail) {
-        heap.addUserProperties({
-          Email: oktaEmail
-        })
+        heap.addUserProperties({ Email: oktaEmail })
       }
 
       if (subscriptionFriendlyName) {
         if (subscriptionFriendlyName == mktoLive106FriendlyName) {
-          heap.addEventProperties({
-            Environment: 'Internal'
-          })
+          heap.addEventProperties({ Environment: 'Internal' })
         } else if (subscriptionFriendlyName == mktoLive106dFriendlyName) {
-          heap.addEventProperties({
-            Environment: 'Partner'
-          })
+          heap.addEventProperties({ Environment: 'Partner' })
         } else if (subscriptionFriendlyName == mktoLiveMasterFriendlyName) {
-          heap.addEventProperties({
-            Environment: 'Master'
-          })
+          heap.addEventProperties({ Environment: 'Master' })
         }
-        heap.addEventProperties({
-          app: subscriptionFriendlyName
-        })
+        heap.addEventProperties({ app: subscriptionFriendlyName })
       } else if (accountString) {
         if (accountString == LIB.mktoAccountString106) {
-          heap.addEventProperties({
-            Environment: 'Internal',
-            app: mktoLive106FriendlyName
-          })
+          heap.addEventProperties({ Environment: 'Internal', app: mktoLive106FriendlyName })
         } else if (accountString == LIB.mktoAccountString106d) {
-          heap.addEventProperties({
-            Environment: 'Partner',
-            app: mktoLive106dFriendlyName
-          })
+          heap.addEventProperties({ Environment: 'Partner', app: mktoLive106dFriendlyName })
         } else if (accountString == LIB.mktoAccountStringMaster) {
-          heap.addEventProperties({
-            Environment: 'Master',
-            app: mktoLiveMasterFriendlyName
-          })
+          heap.addEventProperties({ Environment: 'Master', app: mktoLiveMasterFriendlyName })
         }
       } else if (customerName) {
         if (customerName == mktoLive106CustomerName) {
-          heap.addEventProperties({
-            Environment: 'Internal',
-            app: mktoLive106FriendlyName
-          })
+          heap.addEventProperties({ Environment: 'Internal', app: mktoLive106FriendlyName })
         } else if (customerName == mktoLive106dCustomerName) {
-          heap.addEventProperties({
-            Environment: 'Partner',
-            app: mktoLive106dFriendlyName
-          })
+          heap.addEventProperties({ Environment: 'Partner', app: mktoLive106dFriendlyName })
         } else if (customerName == mktoLiveMasterCustomerName) {
-          heap.addEventProperties({
-            Environment: 'Master',
-            app: mktoLiveMasterFriendlyName
-          })
+          heap.addEventProperties({ Environment: 'Master', app: mktoLiveMasterFriendlyName })
         }
       }
     }
@@ -3331,26 +3289,21 @@ APP.heapIdentify = function () {
         }, 0)
         break
     }
-  }, 0)
+  })
 }
-
-/**************************************************************************************
- *  This function tracks the current event via Heap Analytics.
- **************************************************************************************/
 
 APP.heapTrack = function () {
   let mktoLiveRtpHostname = new RegExp('^(' + mktoLiveMasterRtpHostname + '|' + mktoLive106RtpHostname + ')$', 'i'),
     mktoEmailInsightsHostname = new RegExp('^' + mktoLiveEmailInsightsHostname + '$', 'i'),
     mktoPredictiveContentPathname = new RegExp(/^\/app\/predictive-app\/.*$/),
-    mktoWebPersonalizationPathname = new RegExp(/^\/app\/.*$/)
+    mktoWebPersonalizationPathname = new RegExp(/^\/app\/.*$/),
+    navItems = document.getElementsByClassName('main-nav-item'),
+    origNavItemOnClick
 
   switch (true) {
     case mktoLiveRtpHostname.test(window.location.hostname):
       switch (true) {
         case mktoPredictiveContentPathname.test(window.location.pathname):
-          var navItems = document.getElementsByClassName('main-nav-item'),
-            origNavItemOnClick
-
           for (let ii = 0; ii < navItems.length; ii++) {
             let navItem = navItems[ii].getElementsByTagName('a')
 
@@ -3471,7 +3424,7 @@ chrome.runtime.sendMessage(extensionId, {action: 'checkMktoCookie'}, null,
       console.log('Marketo Other App > checkMktoCookie Msg > Heap Tracking Disabled')
     }
     if (chrome.runtime.lastError) {
-      console.log('Marketo Other App > checkMktoCookie Msg > Error: ' + JSON.stringify(chrome.runtime.lastError))
+      console.log('Marketo Other App > checkMktoCookie Msg > Error: ', chrome.runtime.lastError)
     }
   }
 )

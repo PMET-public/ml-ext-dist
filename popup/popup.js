@@ -1,6 +1,6 @@
-/*
-This file is the combined output of multiple src files. Do not edit it directly.
-*/
+// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
+window.MARKETO_EXT_VERSION = 'v5.4.15'; // version also automatically injected via gulp using manifest.json
+
 isExtDevMode = true
 // catch all for globally defined functions used by any file
 
@@ -3122,6 +3122,12 @@ var LIB = {
 LIB.interceptXHR()
 localManifestVersion = chrome.runtime.getManifest().version
 
+function displayVersionNum() {
+  let d = document.createElement('div')
+  document.getElementById('marketo-live-logo-container').appendChild(d)
+  d.outerHTML = `<div id="extension-version">v${localManifestVersion}</div>`
+}
+
 async function checkExtUpdateAvailable() {
   const response = await fetch('https://raw.githubusercontent.com/PMET-public/ml-ext-dist/master/manifest.json'),
     json = await response.json(),
@@ -3710,6 +3716,8 @@ window.onload = function () {
       //document.getElementById("settings-container").style.display = "none";
     }, 1100)
   }
+
+  displayVersionNum()
 }
 
 const rawGitUrl = 'https://raw.githubusercontent.com/PMET-public/ml-ext-dist',

@@ -278,3 +278,11 @@ input[type='checkbox']:checked + label > span:before{
   left: -9999px;
   position: absolute;
 }
+
+#extension-version {
+  display: table-cell;
+  padding: 0px 3px;
+  font-size: 0.8em;
+  font-style: italic;
+  color: #EEE;
+}

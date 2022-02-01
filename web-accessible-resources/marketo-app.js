@@ -1,8 +1,8 @@
-/*
-This file is the combined output of multiple src files. Do not edit it directly.
-*/
+// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
+window.MARKETO_EXT_VERSION = 'v5.4.15'; // version also automatically injected via gulp using manifest.json
+
 isExtDevMode = true
-console.log('Marketo App > Running')
+console.log('Marketo App > Running', MARKETO_EXT_VERSION)
 /**************************************************************************************
  *  This script contains all of the functionality needed for the manipulation of the
  *  MarketoLive environments.
@@ -4969,7 +4969,7 @@ let isMktPageApp = window.setInterval(function () {
                     LIB.overrideHomeTiles()
                   }
                 }
-                console.log('Marketo App > checkBadExtension Msg > Response: ' + JSON.stringify(response))
+                console.log('Marketo App > checkBadExtension Msg > Response: ', response)
               } else {
                 if (!response) {
                   LIB.validateDemoExtensionCheck(true)
@@ -4978,7 +4978,7 @@ let isMktPageApp = window.setInterval(function () {
                 }
               }
               if (chrome.runtime.lastError) {
-                console.log('Marketo App > checkBadExtension Msg > Error: ' + JSON.stringify(chrome.runtime.lastError))
+                console.log('Marketo App > checkBadExtension Msg > Error: ', chrome.runtime.lastError)
               }
             }
           )
@@ -4990,7 +4990,7 @@ let isMktPageApp = window.setInterval(function () {
           }
         }
         if (chrome.runtime.lastError) {
-          console.log('Marketo App > checkExtensionVersion Msg > Error: ' + JSON.stringify(chrome.runtime.lastError))
+          console.log('Marketo App > checkExtensionVersion Msg > Error: ', chrome.runtime.lastError)
         }
       }
     )
@@ -5332,7 +5332,7 @@ let isMktPageApp = window.setInterval(function () {
               console.log('Marketo App > checkMktoCookie Msg > Saving Enabled for Admin')
             }
             if (chrome.runtime.lastError) {
-              console.log('Marketo App > checkMktoCookie Msg > Error: ' + JSON.stringify(chrome.runtime.lastError))
+              console.log('Marketo App > checkMktoCookie Msg > Error: ', chrome.runtime.lastError)
             }
           }
         )

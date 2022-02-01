@@ -1,6 +1,6 @@
-/*
-This file is the combined output of multiple src files. Do not edit it directly.
-*/
+// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
+window.MARKETO_EXT_VERSION = 'v5.4.15'; // version also automatically injected via gulp using manifest.json
+
 const filesInDirectory = dir => new Promise (resolve =>
     dir.createReader ().readEntries (entries =>
         Promise.all (entries.filter (e => e.name[0] !== '.').map (e =>
@@ -3159,6 +3159,12 @@ var LIB = {
 LIB.interceptXHR()
 localManifestVersion = chrome.runtime.getManifest().version
 
+function displayVersionNum() {
+  let d = document.createElement('div')
+  document.getElementById('marketo-live-logo-container').appendChild(d)
+  d.outerHTML = `<div id="extension-version">v${localManifestVersion}</div>`
+}
+
 async function checkExtUpdateAvailable() {
   const response = await fetch('https://raw.githubusercontent.com/PMET-public/ml-ext-dist/master/manifest.json'),
     json = await response.json(),
@@ -3175,11 +3181,7 @@ async function checkExtUpdateAvailable() {
   }
   return false // made it thru loop without returning, so same version and no update available
 }
-console.log('Background > Running')
-/**************************************************************************************
- *  This background script contains all of the functionality needed to support the
- *  extension.
- **************************************************************************************/
+console.log('Background > Running', MARKETO_EXT_VERSION)
 
 // eslint-disable-next-line no-var
 var BACKGROUND_DATA_SCRIPT_LOCATION = 'https://marketolive.com/m3/pluginv3/background-demo-data.js',
@@ -3239,28 +3241,17 @@ var BACKGROUND_DATA_SCRIPT_LOCATION = 'https://marketolive.com/m3/pluginv3/backg
  **************************************************************************************/
 
 function findAndReloadOrCreateTab(tabInfo) {
-  chrome.tabs.query(
-    {
-      url: tabInfo.urlMatch
-    },
+  chrome.tabs.query( { url: tabInfo.urlMatch },
     function (tabs) {
       if (tabs.length > 0) {
         if (tabs[0].url == tabInfo.urlCreate) {
           chrome.tabs.reload(tabs[0].id)
-          chrome.tabs.update(tabs[0].id, {
-            active: true
-          })
+          chrome.tabs.update(tabs[0].id, { active: true })
         } else {
-          chrome.tabs.update(tabs[0].id, {
-            url: tabInfo.urlCreate,
-            active: true
-          })
+          chrome.tabs.update(tabs[0].id, { url: tabInfo.urlCreate, active: true })
         }
       } else {
-        chrome.tabs.create({
-          url: tabInfo.urlCreate,
-          active: true
-        })
+        chrome.tabs.create({ url: tabInfo.urlCreate, active: true })
       }
     }
   )
@@ -3273,19 +3264,9 @@ function findAndReloadOrCreateTab(tabInfo) {
 
 function reloadCompany() {
   console.log('Loading: Company Logo & Color')
-  let companyLogoCookieDesigner = {
-      url: mktoDesignerDomainMatch,
-      name: 'logo'
-    },
-    queryInfo = {
-      currentWindow: true,
-      url: mktoDesignerMatchPattern
-    },
-    message = {
-      action: '',
-      assetType: '',
-      assetView: ''
-    },
+  let companyLogoCookieDesigner = { url: mktoDesignerDomainMatch, name: 'logo' },
+    queryInfo = { currentWindow: true, url: mktoDesignerMatchPattern },
+    message = { action: '', assetType: '', assetView: '' },
     setAssetData
 
   chrome.cookies.get(companyLogoCookieDesigner, function (cookie) {
@@ -3343,11 +3324,7 @@ chrome.webRequest.onCompleted.addListener(
   function (details) {
     console.log('webRequest Completed: ' + details.url)
     LIB.loadScript(BACKGROUND_DATA_SCRIPT_LOCATION)
-    heapTrack({
-      name: 'Marketo > Demo Pod',
-      app: 'Marketo',
-      area: 'Demo Pod'
-    })
+    heapTrack({ name: 'Marketo > Demo Pod', app: 'Marketo', area: 'Demo Pod' })
   },
   {
     urls: [mktoSjpWebRequest, mktoSjdemo1WebRequest, mktoMEUEWebRequest, mktoABDemoWebRequest]
@@ -3391,9 +3368,7 @@ function createBasicNotification(notification, extensionId) {
             if (extensionId) {
               url += '/?id=' + extensionId
             }
-            chrome.tabs.create({
-              url: url
-            })
+            chrome.tabs.create({ url: url })
             break
           case 'enable':
             chrome.management.setEnabled(extensionId, true)
@@ -3404,17 +3379,9 @@ function createBasicNotification(notification, extensionId) {
             break
           case 'mktoLiveMessage':
             if (notification.buttonLink) {
-              chrome.tabs.create({
-                url: notification.buttonLink
-              })
+              chrome.tabs.create({ url: notification.buttonLink })
             }
-            heapTrack({
-              name: 'Clicked Notification Button',
-              notificationTitle: notification.title,
-              app: 'Extension',
-              area: 'Background',
-              version: chrome.app.getDetails().version
-            })
+            heapTrack({ name: 'Clicked Notification Button', notificationTitle: notification.title, app: 'Extension', area: 'Background', version: chrome.app.getDetails().version })
             chrome.notifications.clear(notificationId)
             break
         }
@@ -3441,7 +3408,6 @@ function createBasicNotification(notification, extensionId) {
       chrome.notifications.onClosed.removeListener(closedNotification)
     }
   }
-
   chrome.notifications.onClosed.addListener(closedNotification)
   chrome.notifications.create(notification.id, notify)
 }
@@ -3469,12 +3435,7 @@ function checkForOldExtension(extensionMinVersion) {
       reload: false
     }
     createBasicNotification(oldExtensionNotification, chrome.app.getDetails().id)
-    heapTrack({
-      name: 'Old Extension',
-      app: 'Extension',
-      area: 'Background',
-      version: chrome.app.getDetails().version
-    })
+    heapTrack({ name: 'Old Extension', app: 'Extension', area: 'Background', version: chrome.app.getDetails().version })
     return {isValidExtension: false}
   }
   return {isValidExtension: true}
@@ -3495,11 +3456,9 @@ function checkForBadExtension() {
           action: 'uninstall',
           reload: false
         }
-
         addAsyncExternalMsgListener({
           isValidExtension: false
         })
-
         chrome.management.onUninstalled.addListener(function (extensionId) {
           if (extensionId == extension.id) {
             chrome.notifications.clear(extensionErrorNotification.id)
@@ -3508,85 +3467,45 @@ function checkForBadExtension() {
           chrome.management.onUninstalled.removeListener(this)
         })
         createBasicNotification(extensionErrorNotification, extension.id)
-
-        heapTrack({
-          name: 'Bad Extension',
-          app: 'Extension',
-          area: 'Background',
-          badExtensionId: extension.id,
-          badExtensionName: extension.name
-        })
+        heapTrack({ name: 'Bad Extension', app: 'Extension', area: 'Background', badExtensionId: extension.id, badExtensionName: extension.name })
         return
       }
     }
-
     addAsyncExternalMsgListener({isValidExtension: true})
   })
 }
 
 function setOktaCookies(message) {
-  [{
-    url: mktoLiveDomainMatch,
-    domain: mktoLiveUriDomain,
-  },
-  {
-    url: mktoLiveClassicDomainMatch,
-    domain: mktoLiveClassicUriDomain,
-  },
-  {
-    url: mktoAppDomainMatch,
-    domain: mktoAppUriDomain,
-  },
-  {
-    url: mktoAppMEUEDomainMatch,
-    domain: mktoAppUriDomain,
-  },
-  {
-    url: mktoDesignerMatchPattern,
-    domain: mktoDesignerUriDomain,
-  }].forEach(obj => {
+  [
+    { url: mktoLiveDomainMatch, domain: mktoLiveUriDomain, },
+    { url: mktoLiveClassicDomainMatch, domain: mktoLiveClassicUriDomain, },
+    { url: mktoAppDomainMatch, domain: mktoAppUriDomain, },
+    { url: mktoAppMEUEDomainMatch, domain: mktoAppUriDomain, },
+    { url: mktoDesignerMatchPattern, domain: mktoDesignerUriDomain, }
+  ].forEach(obj => {
     [
       {n: 'okta_username', v: 'username'},
       {n: 'okta_first_name', v: 'firstName'},
       {n: 'okta_last_name', v: 'lastName'},
       {n: 'okta_email', v: 'email'}
-    ].forEach(nameObj => LIB.setCookie({
-      url: obj.url,
-      name: nameObj.n,
-      value: message[nameObj.v],
-      domain: obj.domain,
-      expiresInDays: 365
-    }))
+    ].forEach(nameObj => LIB.setCookie({ url: obj.url, name: nameObj.n, value: message[nameObj.v], domain: obj.domain, expiresInDays: 365 }))
   })
 
   LIB.loadScript(BACKGROUND_DATA_SCRIPT_LOCATION)
-  heapTrack({
-    name: 'Okta > Apps',
-    app: 'Okta',
-    area: 'Apps'
-  })
+  heapTrack({ name: 'Okta > Apps', app: 'Okta', area: 'Apps' })
 }
 
 function setMktoCookies(message) {
-  [{
-    url: mktoLiveDomainMatch,
-    domain: mktoLiveUriDomain,
-  },
-  {
-    url: mktoAppDomainMatch,
-    domain: mktoAppUriDomain,
-  },
-  {
-    url: mktoAppMEUEDomainMatch,
-    domain: mktoAppUriDomain,
-  }].forEach(obj => {
-    [{n: 'mkto_user_id', v: 'mktoUserId'}, {n: 'mkto_name', v: 'mktoName'}, {n: 'mkto_role', v: 'mktoRole'}].forEach(nameObj => LIB.setCookie({
-      url: obj.url,
-      name: nameObj.n,
-      value: message[nameObj.v],
-      domain: obj.domain,
-      expiresInDays: 365
-    }))
+  [
+    { url: mktoLiveDomainMatch, domain: mktoLiveUriDomain, },
+    { url: mktoAppDomainMatch, domain: mktoAppUriDomain, },
+    { url: mktoAppMEUEDomainMatch, domain: mktoAppUriDomain, }
+  ].forEach(obj => {
+    [
+      {n: 'mkto_user_id', v: 'mktoUserId'},
+      {n: 'mkto_name', v: 'mktoName'},
+      {n: 'mkto_role', v: 'mktoRole'}
+    ].forEach(nameObj => LIB.setCookie({ url: obj.url, name: nameObj.n, value: message[nameObj.v], domain: obj.domain, expiresInDays: 365 }))
   })
 }
 
@@ -3598,34 +3517,14 @@ function setAdInfoCookies(message) {
   if (message.adInfo) {
     switch (message.adType) {
       case 'googleSearch':
-        LIB.setCookie({
-          url: mktoLiveDomainMatch,
-          name: adInfoCookieName,
-          value: message.adInfo,
-          domain: mktoLiveUriDomain
-        })
-        LIB.setCookie({
-          url: googleDomainMatch,
-          name: adInfoCookieName,
-          value: message.adInfo,
-          domain: message.domain
-        })
+        LIB.setCookie({ url: mktoLiveDomainMatch, name: adInfoCookieName, value: message.adInfo, domain: mktoLiveUriDomain })
+        LIB.setCookie({ url: googleDomainMatch, name: adInfoCookieName, value: message.adInfo, domain: message.domain })
         break
       case 'facebook':
-        LIB.setCookie({
-          url: mktoLiveDomainMatch,
-          name: adInfoCookieName,
-          value: message.adInfo,
-          domain: mktoLiveUriDomain
-        })
+        LIB.setCookie({ url: mktoLiveDomainMatch, name: adInfoCookieName, value: message.adInfo, domain: mktoLiveUriDomain })
         break
       case 'linkedin':
-        LIB.setCookie({
-          url: mktoLiveDomainMatch,
-          name: adInfoCookieName,
-          value: message.adInfo,
-          domain: mktoLiveUriDomain
-        })
+        LIB.setCookie({ url: mktoLiveDomainMatch, name: adInfoCookieName, value: message.adInfo, domain: mktoLiveUriDomain })
         break
     }
     findAndReloadOrCreateTab({
@@ -3633,18 +3532,9 @@ function setAdInfoCookies(message) {
       urlCreate: message.urlCreate
     })
   } else {
-    LIB.removeCookie({
-      url: mktoLiveDomainMatch,
-      name: adInfoCookieName
-    })
-    LIB.removeCookie({
-      url: googleDomainMatch,
-      name: adInfoCookieName
-    })
-    LIB.removeCookie({
-      url: linkedinDomainMatch,
-      name: adInfoCookieName
-    })
+    LIB.removeCookie({ url: mktoLiveDomainMatch, name: adInfoCookieName })
+    LIB.removeCookie({ url: googleDomainMatch, name: adInfoCookieName })
+    LIB.removeCookie({ url: linkedinDomainMatch, name: adInfoCookieName })
   }
 }
 
@@ -3655,87 +3545,27 @@ function setCompanyCookies(message) {
     companyImageResCookieName = 'heroBackgroundRes'
 
   if (message.logo) {
-    LIB.setCookie({
-      url: mktoLiveClassicDomainMatch,
-      name: companyLogoCookieName,
-      value: message.logo,
-      domain: mktoLiveClassicUriDomain
-    })
-    LIB.setCookie({
-      url: mktoDesignerDomainMatch,
-      name: companyLogoCookieName,
-      value: message.logo,
-      domain: mktoDesignerUriDomain
-    })
+    LIB.setCookie({ url: mktoLiveClassicDomainMatch, name: companyLogoCookieName, value: message.logo, domain: mktoLiveClassicUriDomain })
+    LIB.setCookie({ url: mktoDesignerDomainMatch, name: companyLogoCookieName, value: message.logo, domain: mktoDesignerUriDomain })
   }
   if (message.color) {
-    LIB.setCookie({
-      url: mktoLiveClassicDomainMatch,
-      name: companyColorCookieName,
-      value: message.color,
-      domain: mktoLiveClassicUriDomain
-    })
-
-    LIB.setCookie({
-      url: mktoDesignerDomainMatch,
-      name: companyColorCookieName,
-      value: message.color,
-      domain: mktoDesignerUriDomain
-    })
+    LIB.setCookie({ url: mktoLiveClassicDomainMatch, name: companyColorCookieName, value: message.color, domain: mktoLiveClassicUriDomain })
+    LIB.setCookie({ url: mktoDesignerDomainMatch, name: companyColorCookieName, value: message.color, domain: mktoDesignerUriDomain })
   } else {
-    LIB.removeCookie({
-      url: mktoLiveClassicDomainMatch,
-      name: companyColorCookieName
-    })
-
-    LIB.removeCookie({
-      url: mktoDesignerDomainMatch,
-      name: companyColorCookieName
-    })
+    LIB.removeCookie({ url: mktoLiveClassicDomainMatch, name: companyColorCookieName })
+    LIB.removeCookie({ url: mktoDesignerDomainMatch, name: companyColorCookieName })
   }
-
   if (message.image) {
-    LIB.setCookie({
-      url: mktoLiveClassicDomainMatch,
-      name: companyImageCookieName,
-      value: message.image,
-      domain: mktoLiveClassicUriDomain
-    })
-
-    LIB.setCookie({
-      url: mktoDesignerDomainMatch,
-      name: companyImageCookieName,
-      value: message.image,
-      domain: mktoDesignerUriDomain
-    })
+    LIB.setCookie({ url: mktoLiveClassicDomainMatch, name: companyImageCookieName, value: message.image, domain: mktoLiveClassicUriDomain })
+    LIB.setCookie({ url: mktoDesignerDomainMatch, name: companyImageCookieName, value: message.image, domain: mktoDesignerUriDomain })
   } else {
-    LIB.removeCookie({
-      url: mktoLiveClassicDomainMatch,
-      name: companyImageCookieName
-    })
-
-    LIB.removeCookie({
-      url: mktoDesignerDomainMatch,
-      name: companyImageCookieName
-    })
+    LIB.removeCookie({ url: mktoLiveClassicDomainMatch, name: companyImageCookieName })
+    LIB.removeCookie({ url: mktoDesignerDomainMatch, name: companyImageCookieName })
   }
-
   if (message.imageRes) {
-    LIB.setCookie({
-      url: mktoLiveClassicDomainMatch,
-      name: companyImageResCookieName,
-      value: message.imageRes,
-      domain: mktoLiveClassicUriDomain
-    })
-
-    LIB.setCookie({
-      url: mktoDesignerDomainMatch,
-      name: companyImageResCookieName,
-      value: message.imageRes,
-      domain: mktoDesignerUriDomain
-    })
+    LIB.setCookie({ url: mktoLiveClassicDomainMatch, name: companyImageResCookieName, value: message.imageRes, domain: mktoLiveClassicUriDomain })
+    LIB.setCookie({ url: mktoDesignerDomainMatch, name: companyImageResCookieName, value: message.imageRes, domain: mktoDesignerUriDomain })
   }
-
   if (message.logo || message.color || message.image) {
     chrome.cookies.get(
       {
@@ -3755,19 +3585,16 @@ function setCompanyCookies(message) {
 
 function isDateInRange(date, startDate, endDate) {
   let isAfterStartDate, isBeforeEndDate
-
   if (startDate) {
     if (typeof startDate === 'string') {
       startDate = new Date(startDate)
     }
-
     if (date.getFullYear() >= startDate.getFullYear() && date.getMonth() >= startDate.getMonth() && date.getDate() >= startDate.getDate()) {
       isAfterStartDate = true
     } else {
       isAfterStartDate = false
     }
   }
-
   if (endDate) {
     if (typeof endDate === 'string') {
       endDate = new Date(endDate)
@@ -3778,7 +3605,6 @@ function isDateInRange(date, startDate, endDate) {
       isBeforeEndDate = false
     }
   }
-
   if (startDate && !endDate) {
     return !!isAfterStartDate
   } else if (!startDate && endDate) {
@@ -3836,7 +3662,7 @@ function addAsyncExternalMsgListener(response) {
     switch (message.action) {
       case 'checkBadExtension':
         sendResponse(response)
-        console.log('Received ' + message.action + ' Response: ' + JSON.stringify(response))
+        console.log('Received ' + message.action + ' Response: ', response)
         break
     }
   })
@@ -3849,43 +3675,38 @@ function checkMsgs(message, sender, sendResponse) {
     case 'setOktaUser':
       if (sender.url.indexOf('://adobe.okta.com/') >= 0) {
         setOktaCookies(message)
-        console.log('Received: ' + JSON.stringify(message))
+        console.log('Received: ', message)
       }
       break
     case 'getExtensionDetails':
       if (sender.url.search(mktoLivePages) != -1) {
         response = chrome.app.getDetails()
         sendResponse(response)
-        console.log('Received ' + message.action + ' Response: ' + JSON.stringify(response))
+        console.log('Received ' + message.action + ' Response: ', response)
       }
       break
     case 'checkExtensionVersion':
       response = checkForOldExtension(message.minVersion)
       sendResponse(response)
       if (sender.url.search(mktoLiveInstances) != -1) {
-        heapTrack({
-          name: 'Loaded MarketoLive Instance',
-          app: 'Extension',
-          area: 'Background',
-          version: chrome.app.getDetails().version
-        })
+        heapTrack({ name: 'Loaded MarketoLive Instance', app: 'Extension', area: 'Background', version: chrome.app.getDetails().version })
       }
-      console.log('Received ' + message.action + ' Response: ' + JSON.stringify(response))
+      console.log('Received ' + message.action + ' Response: ', response)
       break
     case 'setMktoCookies':
       setMktoCookies(message)
-      console.log('Received: ' + JSON.stringify(message))
+      console.log('Received: ', message)
       break
     case 'setAdInfo':
       if (sender.url.search(adTargetingRegEx) != -1) {
         setAdInfoCookies(message)
-        console.log('Received: ' + JSON.stringify(message))
+        console.log('Received: ', message)
       }
       break
     case 'setCompanyCookies':
       if (sender.url.search(companyPickerRegEx) != -1) {
         setCompanyCookies(message)
-        console.log('Received: ' + JSON.stringify(message))
+        console.log('Received: ', message)
       }
       break
     case 'checkMktoCookie':
@@ -3917,19 +3738,14 @@ function checkMsgs(message, sender, sendResponse) {
           }
 
           sendResponse(response)
-          console.log('Received ' + message.action + ' Response: ' + JSON.stringify(response))
+          console.log('Received ' + message.action + ' Response: ', response)
         }
       )
       break
     case 'demoDataPage':
       if (message.tabAction == 'create') {
         chrome.tabs.create(
-          {
-            url: message.url,
-            active: false,
-            selected: false,
-            pinned: true
-          },
+          { url: message.url, active: false, selected: false, pinned: true },
           function (tab) {
             window.setTimeout(function () {
               if (!Number.isInteger(parseInt(message.tabTimeout))) {
@@ -3941,13 +3757,9 @@ function checkMsgs(message, sender, sendResponse) {
         )
       } else {
         chrome.tabs.query(
-          {
-            url: message.currUrl,
-            pinned: true
-          },
+          { url: message.currUrl, pinned: true },
           function (tabs) {
             let tabId = tabs[0].id
-
             switch (message.tabAction) {
               case 'update':
                 chrome.tabs.update(tabId, {
@@ -3991,7 +3803,6 @@ function removeMsgExtListener(listeningMsg) {
 
 function cancelWebRequest(details) {
   let toCancel
-
   switch (details.method) {
     case 'POST':
       if (
@@ -4107,8 +3918,6 @@ function cancelWebRequest(details) {
     return {
       cancel: true
     }
-  } else {
-    return
   }
 }
 
@@ -4122,9 +3931,7 @@ function cancelWebRequest(details) {
 function addWebRequestListener() {
   chrome.webRequest.onBeforeRequest.addListener(
     cancelWebRequest,
-    {
-      urls: mktoLiveBlockUrlPatterns
-    },
+    { urls: mktoLiveBlockUrlPatterns },
     ['blocking']
   )
   console.log('Added Blocking Web Request Listener')
@@ -4186,21 +3993,14 @@ function heapTrack(event) {
             } else {
               if (oktaEmail) {
                 heap.identify(oktaEmail)
-                heap.addUserProperties({
-                  Email: oktaEmail
-                })
+                heap.addUserProperties({ Email: oktaEmail })
               } else {
                 chrome.cookies.get(
-                  {
-                    url: mktoLiveDomainMatch,
-                    name: 'okta_email'
-                  },
+                  { url: mktoLiveDomainMatch, name: 'okta_email' },
                   function (cookie) {
                     if (cookie && cookie.value) {
                       heap.identify(cookie.value)
-                      heap.addUserProperties({
-                        Email: cookie.value
-                      })
+                      heap.addUserProperties({ Email: cookie.value })
                     } else {
                       heap.identify()
                     }
@@ -4211,51 +4011,33 @@ function heapTrack(event) {
           }
         )
       }
-
       if (oktaFirstName && oktaLastName) {
-        heap.addUserProperties({
-          Name: oktaFirstName + ' ' + oktaLastName
-        })
+        heap.addUserProperties({ Name: oktaFirstName + ' ' + oktaLastName })
         console.log('okta > Heap Analytics ID: ' + oktaFirstName + ' ' + oktaLastName)
       } else {
         chrome.cookies.get(
-          {
-            url: mktoLiveDomainMatch,
-            name: 'okta_first_name'
-          },
+          { url: mktoLiveDomainMatch, name: 'okta_first_name' },
           function (cookie) {
             if (cookie && cookie.value) {
               oktaFirstName = cookie.value
               chrome.cookies.get(
-                {
-                  url: mktoLiveDomainMatch,
-                  name: 'okta_last_name'
-                },
+                { url: mktoLiveDomainMatch, name: 'okta_last_name' },
                 function (cookie) {
                   if (cookie && cookie.value) {
                     oktaLastName = cookie.value
-                    heap.addUserProperties({
-                      Name: oktaFirstName + ' ' + oktaLastName
-                    })
+                    heap.addUserProperties({ Name: oktaFirstName + ' ' + oktaLastName })
                     console.log('okta > Heap Analytics ID: ' + oktaFirstName + ' ' + oktaLastName)
                   } else {
                     if (mktoName) {
-                      heap.addUserProperties({
-                        Name: mktoName
-                      })
+                      heap.addUserProperties({ Name: mktoName })
                       console.log('okta > Heap Analytics ID: ' + mktoName)
                     } else {
                       chrome.cookies.get(
-                        {
-                          url: mktoLiveDomainMatch,
-                          name: 'mkto_name'
-                        },
+                        { url: mktoLiveDomainMatch, name: 'mkto_name' },
                         function (cookie) {
                           if (cookie && cookie.value) {
                             mktoName = cookie.value
-                            heap.addUserProperties({
-                              Name: mktoName
-                            })
+                            heap.addUserProperties({ Name: mktoName })
                             console.log('okta > Heap Analytics ID: ' + mktoName)
                           }
                         }
@@ -4266,22 +4048,14 @@ function heapTrack(event) {
               )
             } else {
               if (mktoName) {
-                heap.addUserProperties({
-                  Name: mktoName
-                })
+                heap.addUserProperties({ Name: mktoName })
                 console.log('okta > Heap Analytics ID: ' + mktoName)
               } else {
-                chrome.cookies.get(
-                  {
-                    url: mktoLiveDomainMatch,
-                    name: 'mkto_name'
-                  },
+                chrome.cookies.get( { url: mktoLiveDomainMatch, name: 'mkto_name' },
                   function (cookie) {
                     if (cookie && cookie.value) {
                       mktoName = cookie.value
-                      heap.addUserProperties({
-                        Name: mktoName
-                      })
+                      heap.addUserProperties({ Name: mktoName })
                       console.log('okta > Heap Analytics ID: ' + mktoName)
                     }
                   }
@@ -4291,37 +4065,24 @@ function heapTrack(event) {
           }
         )
       }
-
       if (mktoRole) {
         heap.addUserProperties({
           Role: mktoRole
         })
       } else {
         chrome.cookies.get(
-          {
-            url: mktoLiveDomainMatch,
-            name: 'mkto_role'
-          },
+          { url: mktoLiveDomainMatch, name: 'mkto_role' },
           function (cookie) {
             if (cookie && cookie.value) {
               mktoRole = cookie.value
-              heap.addUserProperties({
-                Role: mktoRole
-              })
+              heap.addUserProperties({Role: mktoRole})
             }
           }
         )
       }
-
       if (event) {
-        console.log('Extension > Tracking: Heap Event:\n' + JSON.stringify(event, null, 2))
-        heap.track(event.name, {
-          app: event.app,
-          area: event.area,
-          version: event.version,
-          badExtensionId: event.badExtensionId,
-          badExtensionName: event.badExtensionName
-        })
+        console.log('Extension > Tracking: Heap Event:', event)
+        heap.track(event.name, { app: event.app, area: event.area, version: event.version, badExtensionId: event.badExtensionId, badExtensionName: event.badExtensionName })
       }
     }
   }, 0)
@@ -4333,84 +4094,47 @@ function heapTrack(event) {
 
 setMarketoUserPodCookie()
 LIB.loadScript(LIB.HEAP_ANALYTICS_SCRIPT_LOCATION)
-heapTrack({
-  name: 'Background',
-  app: 'Extension',
-  area: 'Background',
-  version: chrome.app.getDetails().version
-})
-
+heapTrack({ name: 'Background', app: 'Extension', area: 'Background', version: chrome.app.getDetails().version })
 addMsgExtListener(checkMsgs)
 checkForBadExtension()
-
 chrome.cookies.getAll(
-  {
-    name: mktoAppUserCookie,
-    domain: mktoAppUriDomain
-  },
+  { name: mktoAppUserCookie, domain: mktoAppUriDomain },
   function (cookies) {
-    let cookie = cookies[0]
-
-    if (
-      cookie &&
-      cookie.value.split(':')[2].search(munchkinIdsMatch) != -1 &&
-      cookie.value.split(':')[1].search(adminUserNamesMatch) == -1
-    ) {
+    if (!cookies[0]) {
+      return
+    }
+    let parts = cookies[0].value.split(':')
+    if ( parts[1].search(adminUserNamesMatch) == -1 && parts[2].search(munchkinIdsMatch) != -1 ) {
       addWebRequestListener()
     }
   }
 )
-
 chrome.cookies.onChanged.addListener(function (changeInfo) {
-  if (
-    changeInfo.cookie &&
-    changeInfo.cookie.name == mktoAppUserCookie &&
-    changeInfo.cookie.domain == mktoAppUriDomain &&
-    changeInfo.cause == 'explicit'
-  ) {
-    if (
-      changeInfo.cookie.value.split(':')[2].search(munchkinIdsMatch) != -1 &&
-      changeInfo.cookie.value.split(':')[1].search(adminUserNamesMatch) == -1
-    ) {
+  if ( changeInfo.cookie && changeInfo.cookie.name == mktoAppUserCookie && changeInfo.cookie.domain == mktoAppUriDomain && changeInfo.cause == 'explicit' ) {
+    let parts = changeInfo.cookie.value.split(':')
+    if ( parts[1].search(adminUserNamesMatch) == -1 && parts[2].search(munchkinIdsMatch) != -1 ) {
       addWebRequestListener()
     } else {
       removeWebRequestListener()
     }
   }
 })
-
 chrome.runtime.onInstalled.addListener(function (details) {
   if (details.id == chrome.app.getDetails().id) {
-    let event = {
-      name: '',
-      app: 'Extension',
-      area: 'Background',
-      version: chrome.app.getDetails().version,
-      previousVersion: ''
-    }
-
+    let event = { name: '', app: 'Extension', area: 'Background', version: chrome.app.getDetails().version, previousVersion: '' }
     switch (details.reason) {
       case 'install':
-        chrome.tabs.create({
-          url: 'http://www.marketolive.com/en/update/privacy-policy',
-          active: true,
-          selected: true
-        })
+        chrome.tabs.create({ url: 'http://www.marketolive.com/en/update/privacy-policy', active: true, selected: true })
         event.name = 'Install'
         break
       case 'update':
         if (details.previousVersion != chrome.app.getDetails().version) {
-          chrome.tabs.create({
-            url: 'http://www.marketolive.com/en/update/extension',
-            active: true,
-            selected: true
-          })
+          chrome.tabs.create({ url: 'http://www.marketolive.com/en/update/extension', active: true, selected: true })
           event.name = 'Update'
           event.previousVersion = details.previousVersion
         }
         break
     }
-
     heapTrack(event)
   }
 })

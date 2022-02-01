@@ -1,6 +1,6 @@
-/*
-This file is the combined output of multiple src files. Do not edit it directly.
-*/
+// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
+window.MARKETO_EXT_VERSION = 'v5.4.15'; // version also automatically injected via gulp using manifest.json
+
 isExtDevMode = true
 // catch all for globally defined functions used by any file
 
@@ -3120,7 +3120,7 @@ var LIB = {
 
 }
 LIB.interceptXHR()
-console.log('Google Search > Running')
+console.log('Google Search > Running', MARKETO_EXT_VERSION)
 /**************************************************************************************
  *  This module contains all of the functionality needed for enabling dynamic ads
  *  within Google search.

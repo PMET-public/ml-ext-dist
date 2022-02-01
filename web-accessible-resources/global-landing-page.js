@@ -1,6 +1,6 @@
-/*
-This file is the combined output of multiple src files. Do not edit it directly.
-*/
+// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
+window.MARKETO_EXT_VERSION = 'v5.4.15'; // version also automatically injected via gulp using manifest.json
+
 isExtDevMode = true
 // catch all for globally defined functions used by any file
 
@@ -3120,7 +3120,7 @@ var LIB = {
 
 }
 LIB.interceptXHR()
-console.log('Global Landing Page > Running')
+console.log('Global Landing Page > Running', MARKETO_EXT_VERSION)
 // eslint-disable-next-line no-var
 var MARKETO_LIVE_LANDING_PAGE = 'https://marketolive.com/m3/pluginv3/marketo-live-landing-page.js',
   mktoLiveProdLandingPageDomain = 'http://pages.marketolive.com',
