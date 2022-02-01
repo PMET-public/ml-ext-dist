@@ -2868,10 +2868,10 @@ var LIB = {
   },
 
   waitForElBySel: async function(selector) {
-    let cont
+    let cont, delay = 2
     while (!(cont && cont.parentNode)) {
       cont = document.querySelector(selector)
-      await new Promise(resolve => setTimeout(resolve, 5))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return cont
   },
@@ -2967,15 +2967,17 @@ var LIB = {
   },
 
   mktoPageGlobalReady: async function () {
+    let delay = 2
     while (!(LIB.isPropOfWindowObj('MktPage.savedState.custPrefix') && MktPage.userid)) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
 
   dlTokenReady: async function () {
+    let delay = 2
     while (!LIB.isPropOfWindowObj('Mkt3.DL.getDlToken')) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
@@ -2991,8 +2993,9 @@ var LIB = {
   },
 
   heapReady: async function () {
+    let delay = 2
     while (!LIB.isPropOfWindowObj('heap.loaded')) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
@@ -3129,6 +3132,9 @@ function displayVersionNum() {
 }
 
 async function checkExtUpdateAvailable() {
+  if (chrome.runtime.id === 'onibnnoghllldiecboelbpcaeggfiohl') {
+    return false // updates do not apply to the version from the chrome web store
+  }
   const response = await fetch('https://raw.githubusercontent.com/PMET-public/ml-ext-dist/master/manifest.json'),
     json = await response.json(),
     remoteManifestParts = json.version.split('.')

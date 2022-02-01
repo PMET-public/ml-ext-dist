@@ -2868,10 +2868,10 @@ var LIB = {
   },
 
   waitForElBySel: async function(selector) {
-    let cont
+    let cont, delay = 2
     while (!(cont && cont.parentNode)) {
       cont = document.querySelector(selector)
-      await new Promise(resolve => setTimeout(resolve, 5))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return cont
   },
@@ -2967,15 +2967,17 @@ var LIB = {
   },
 
   mktoPageGlobalReady: async function () {
+    let delay = 2
     while (!(LIB.isPropOfWindowObj('MktPage.savedState.custPrefix') && MktPage.userid)) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
 
   dlTokenReady: async function () {
+    let delay = 2
     while (!LIB.isPropOfWindowObj('Mkt3.DL.getDlToken')) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
@@ -2991,8 +2993,9 @@ var LIB = {
   },
 
   heapReady: async function () {
+    let delay = 2
     while (!LIB.isPropOfWindowObj('heap.loaded')) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
@@ -3130,33 +3133,11 @@ chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     let runScript = document.createElement('script'),
       innerScript
     if (msg.subject === 'all') {
-      innerScript = document.createTextNode(
-        'console.log(\'Starting comp then add \'' +
-          compperc +
-          ' : ' +
-          msg.addperc +
-          ');TOUT.waitForCsrfToken(TOUT.addPeopleToCampaigns(' +
-          msg.addperc +
-          ').then(TOUT.completeTasks(' +
-          compperc +
-          ')));console.log(\'Finished\');'
-      )
+      innerScript = document.createTextNode(`console.log('Starting comp then add '${compperc} : ${msg.addperc});TOUT.waitForCsrfToken(TOUT.addPeopleToCampaigns(${msg.addperc}).then(TOUT.completeTasks(${compperc})));console.log('Finished');`)
     } else if (msg.subject === 'add') {
-      innerScript = document.createTextNode(
-        'console.log(\'Starting \' + ' +
-          msg.addperc +
-          ');TOUT.waitForCsrfToken(TOUT.addPeopleToCampaigns(' +
-          msg.addperc +
-          '));console.log(\'Finished\');'
-      )
+      innerScript = document.createTextNode(`console.log('Starting ' + ${msg.addperc});TOUT.waitForCsrfToken(TOUT.addPeopleToCampaigns(${msg.addperc}));console.log('Finished');`)
     } else if (msg.subject === 'camp') {
-      innerScript = document.createTextNode(
-        'console.log(\'Starting \' + ' +
-          msg.compperc +
-          ');TOUT.waitForCsrfToken(TOUT.completeTasks(' +
-          msg.compperc +
-          '));console.log(\'Finished\');'
-      )
+      innerScript = document.createTextNode(`console.log('Starting ' + ${msg.compperc});TOUT.waitForCsrfToken(TOUT.completeTasks(${msg.compperc}));console.log('Finished');`)
     }
     runScript.appendChild(innerScript)
     ;(document.head || document.documentElement).appendChild(runScript)

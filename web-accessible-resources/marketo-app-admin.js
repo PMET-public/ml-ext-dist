@@ -305,7 +305,6 @@ ADMIN.getAllRoles = function (callback) {
   console.log('Getting All Roles')
   LIB.webRequest('/custAdmin/getAllRoles', 'xsrfId=' + MktSecurity.getXsrfId(), 'POST', true, 'json', function (response) {
     let result = JSON.parse(response)
-
     if (result.data && result.data.length > 0) {
       console.log('Retrieved All Roles')
       if (typeof callback === 'function') {
@@ -400,33 +399,27 @@ ADMIN.createWorkspace = function (workspace, callback, args) {
  **************************************************************************************/
 
 ADMIN.getWorkspacePartition = function (workspaceMatch, callback) {
-  function getWorkspacePartition(result) {
+  if (typeof callback !== 'function') {
+    console.error('Expected function')
+    return
+  }
+  ADMIN.getAllWorkspaces(function (result) {
     console.log('Getting Workspace Partition: ' + workspaceMatch.name)
     if (result.data) {
       for (let ii = 0; ii < result.data.length; ii++) {
         let workspace = result.data[ii]
-
         if (workspace.name == workspaceMatch.name) {
           for (let jj = 0; jj < workspace.ptns.length; jj++) {
             let partiton = workspace.ptns[jj]
-
             if (partiton.name == workspaceMatch.partitionName && partiton.isPrimary) {
               console.log('Retrieved Workspace/Partion: ' + workspaceMatch.name + '/' + workspaceMatch.partitionName)
-              if (typeof callback === 'function') {
-                callback({
-                  id: partiton.id,
-                  name: partiton.name,
-                  domain: workspace.defaultDomain
-                })
-              }
+              callback({ id: partiton.id, name: partiton.name, domain: workspace.defaultDomain })
             }
           }
         }
       }
     }
-  }
-
-  ADMIN.getAllWorkspaces(getWorkspacePartition)
+  })
 }
 
 /**************************************************************************************
@@ -464,23 +457,17 @@ ADMIN.createUserWorkspace = function (workspace, callback, args) {
         break
     }
 
-    function createUserWorkspace(partition) {
-      ADMIN.createWorkspace(
-        {
-          name: workspace.name,
-          description: description,
-          language: language,
-          admLanguage: admLanguage,
-          domain: partition.domain,
-          partitionId: partition.id,
-          partitionName: partition.name
-        },
-        callback,
-        args
-      )
-    }
-
-    ADMIN.getWorkspacePartition(workspaceMatch, createUserWorkspace)
+    ADMIN.getWorkspacePartition(workspaceMatch, function (partition) {
+      ADMIN.createWorkspace({
+        name: workspace.name,
+        description: description,
+        language: language,
+        admLanguage: admLanguage,
+        domain: partition.domain,
+        partitionId: partition.id,
+        partitionName: partition.name
+      }, callback, args )
+    })
   } else {
     callback(args)
   }
@@ -514,44 +501,20 @@ ADMIN.getUserRoles = function (userWorkspace, workspaces) {
       case 'English':
         roles = JSON.parse(JSON.stringify(defaultRolesEn))
         if (!userWorkspace.none) {
-          roles.push({
-            id: userWorkspaceRole.id,
-            allzones: userWorkspaceRole.allzones,
-            zones: [
-              {
-                id: userWorkspace.id
-              }
-            ]
-          })
+          roles.push({ id: userWorkspaceRole.id, allzones: userWorkspaceRole.allzones, zones: [ { id: userWorkspace.id } ] })
         }
         break
       case 'Japanese':
       case '日本語（日本）':
         roles = JSON.parse(JSON.stringify(defaultRolesJp))
         if (!userWorkspace.none) {
-          roles.push({
-            id: userWorkspaceRole.id,
-            allzones: userWorkspaceRole.allzones,
-            zones: [
-              {
-                id: userWorkspace.id
-              }
-            ]
-          })
+          roles.push({ id: userWorkspaceRole.id, allzones: userWorkspaceRole.allzones, zones: [ { id: userWorkspace.id } ] })
         }
         break
       default:
         roles = JSON.parse(JSON.stringify(defaultRolesEn))
         if (!userWorkspace.none) {
-          roles.push({
-            id: userWorkspaceRole.id,
-            allzones: userWorkspaceRole.allzones,
-            zones: [
-              {
-                id: userWorkspace.id
-              }
-            ]
-          })
+          roles.push({ id: userWorkspaceRole.id, allzones: userWorkspaceRole.allzones, zones: [ { id: userWorkspace.id } ] })
         }
         break
     }
@@ -585,53 +548,24 @@ ADMIN.inviteUser = function (user) {
     email = user.email.replace(/\+/, '%2B'),
     message =
       '{{FirstName}} {{LastName}},<br><br>Welcome to Marketo!, Click this link to set your password and begin.<br><br>{{LoginToMarketoLink}}<br><br>Not sure where to start? Visit <a href="https://docs.marketo.com/display/DOCS/Getting+Started" target="_blank">Getting Started with Marketo page</a> for tutorials and other resources. You are already set up - dive right into Step 2!<br><br>Happy Marketing!',
-    userWorkspace = {
-      name: user.firstName + ' ' + user.lastName,
-      language: user.language
-    },
+    userWorkspace = { name: user.firstName + ' ' + user.lastName, language: user.language },
     roles
 
   if (!user.directInvite) {
     email = 'marketodemo%2B' + userId.split('@')[0] + '@gmail.com'
   }
 
-  function getUserWorkspaceId(workspaces) {
-    roles = ADMIN.getUserRoles(userWorkspace, workspaces)
-    console.log('Inviting User: ' + email + ', ' + userId + ', ' + user.firstName + ', ' + user.lastName + ' [' + user.role + ']')
-    LIB.webRequest(
-      '/custAdmin/inviteUserSubmit',
-      'ajaxHandler=MktSession&mktReqUid=' +
-        new Date().getTime() +
-        Ext.id(null, ':') +
-        '&cadEmail=' +
-        email +
-        '&cadUserId=' +
-        userId +
-        '&cadFirstName=' +
-        user.firstName +
-        '&cadLastName=' +
-        user.lastName +
-        ' [' +
-        user.role +
-        ']' +
-        '&cadApiOnly=false' +
-        '&cadRole=' +
-        roles +
-        '&cadMessage=' +
-        message +
-        '&xsrfId=' +
-        MktSecurity.getXsrfId(),
-      'POST',
-      true,
-      'json',
-      function (response) {
-        console.log('Invited User')
-      }
-    )
-  }
-
   function getAllWorkspaces() {
-    ADMIN.getAllWorkspaces(getUserWorkspaceId)
+    ADMIN.getAllWorkspaces(function (workspaces) {
+      roles = ADMIN.getUserRoles(userWorkspace, workspaces)
+      LIB.webRequest('/custAdmin/inviteUserSubmit',
+        'ajaxHandler=MktSession&mktReqUid=' + new Date().getTime() + Ext.id(null, ':') + '&cadEmail=' + email + '&cadUserId=' + userId + '&cadFirstName=' + user.firstName + '&cadLastName=' + user.lastName + ' [' + user.role + ']' + '&cadApiOnly=false' + '&cadRole=' + roles + '&cadMessage=' + message + '&xsrfId=' + MktSecurity.getXsrfId(),
+        'POST', true, 'json',
+        function (response) {
+          console.log('Invited User')
+        }
+      )
+    })
   }
 
   if (accountString == LIB.mktoAccountStringMaster || accountString == LIB.mktoAccountStringABDemoMaster) {
@@ -641,38 +575,15 @@ ADMIN.inviteUser = function (user) {
     ADMIN.createUserWorkspace(userWorkspace, getAllWorkspaces)
   } else {
     roles = ADMIN.getUserRoles(userWorkspace)
-    console.log('Inviting User: ' + email + ', ' + userId + ', ' + user.firstName + ', ' + user.lastName + ' [' + user.role + ']')
-    LIB.webRequest(
-      '/custAdmin/inviteUserSubmit',
-      'ajaxHandler=MktSession&mktReqUid=' +
-        new Date().getTime() +
-        Ext.id(null, ':') +
-        '&cadEmail=' +
-        email +
-        '&cadUserId=' +
-        userId +
-        '&cadFirstName=' +
-        user.firstName +
-        '&cadLastName=' +
-        user.lastName +
-        ' [' +
-        user.role +
-        ']' +
-        '&cadApiOnly=false' +
-        '&cadRole=' +
-        roles +
-        '&cadMessage=' +
-        message +
-        '&xsrfId=' +
-        MktSecurity.getXsrfId(),
-      'POST',
-      true,
-      'json',
+    LIB.webRequest('/custAdmin/inviteUserSubmit',
+      'ajaxHandler=MktSession&mktReqUid=' + new Date().getTime() + Ext.id(null, ':') + '&cadEmail=' + email + '&cadUserId=' + userId + '&cadFirstName=' + user.firstName + '&cadLastName=' + user.lastName + ' [' + user.role + ']' + '&cadApiOnly=false' + '&cadRole=' + roles + '&cadMessage=' + message + '&xsrfId=' + MktSecurity.getXsrfId(),
+      'POST', true, 'json',
       function (response) {
         console.log('Invited User')
       }
     )
   }
+  console.log('Inviting User: ' + email + ', ' + userId + ', ' + user.firstName + ', ' + user.lastName + ' [' + user.role + ']')
 }
 
 /**************************************************************************************
@@ -684,17 +595,8 @@ ADMIN.issueCalendarLicense = function (userId) {
   console.log('Issuing Calendar License: ' + userId)
   LIB.webRequest(
     '/calendar/issueLicensesSubmit',
-    'ajaxHandler=MktSession&mktReqUid=' +
-      new Date().getTime() +
-      Ext.id(null, ':') +
-      '&userIds=["' +
-      userId +
-      '"]' +
-      '&xsrfId=' +
-      MktSecurity.getXsrfId(),
-    'POST',
-    true,
-    'json',
+    'ajaxHandler=MktSession&mktReqUid=' + new Date().getTime() + Ext.id(null, ':') + '&userIds=["' + userId + '"]' + '&xsrfId=' + MktSecurity.getXsrfId(),
+    'POST', true, 'json',
     function (response) {
       console.log('Issued Calendar License')
     }
@@ -708,19 +610,9 @@ ADMIN.issueCalendarLicense = function (userId) {
 
 ADMIN.revokeCalendarLicense = function (userId) {
   console.log('Revoking Calendar License: ' + userId)
-  LIB.webRequest(
-    '/calendar/revokeLicensesSubmit',
-    'ajaxHandler=MktSession&mktReqUid=' +
-      new Date().getTime() +
-      Ext.id(null, ':') +
-      '&userIds=["' +
-      userId +
-      '"]' +
-      '&xsrfId=' +
-      MktSecurity.getXsrfId(),
-    'POST',
-    true,
-    'json',
+  LIB.webRequest( '/calendar/revokeLicensesSubmit',
+    'ajaxHandler=MktSession&mktReqUid=' + new Date().getTime() + Ext.id(null, ':') + '&userIds=["' + userId + '"]' + '&xsrfId=' + MktSecurity.getXsrfId(),
+    'POST', true, 'json',
     function (response) {
       console.log('Revoked Calendar License')
     }
@@ -809,10 +701,7 @@ ADMIN.editUser = function (user) {
     {role} = user,
     newEmail = user.email.replace(/\+/, '%2B'),
     {id} = user,
-    userWorkspace = {
-      name: user.firstName + ' ' + user.lastName,
-      language: user.language
-    },
+    userWorkspace = { name: user.firstName + ' ' + user.lastName, language: user.language },
     roles
 
   function getUserWorkspaceId(workspaces) {
@@ -820,30 +709,8 @@ ADMIN.editUser = function (user) {
     console.log('Editing User: ' + userId + ', ' + firstName + ', ' + lastName + ', ' + newEmail)
     LIB.webRequest(
       '/custAdmin/editUserSubmit',
-      'ajaxHandler=MktSession&mktReqUid=' +
-        new Date().getTime() +
-        Ext.id(null, ':') +
-        '&cadUserId=' +
-        userId +
-        '&cadFirstName=' +
-        firstName +
-        '&cadLastName=' +
-        lastName +
-        ' [' +
-        role +
-        ']' +
-        '&cadEmail=' +
-        newEmail +
-        '&cadRole=' +
-        roles +
-        '&cadId=' +
-        id +
-        '&cadApiOnly=false&cadIsDeviceAuthEnabled=0' +
-        '&xsrfId=' +
-        MktSecurity.getXsrfId(),
-      'POST',
-      true,
-      'json',
+      'ajaxHandler=MktSession&mktReqUid=' + new Date().getTime() + Ext.id(null, ':') + '&cadUserId=' + userId + '&cadFirstName=' + firstName + '&cadLastName=' + lastName + ' [' + role + ']' + '&cadEmail=' + newEmail + '&cadRole=' + roles + '&cadId=' + id + '&cadApiOnly=false&cadIsDeviceAuthEnabled=0' + '&xsrfId=' + MktSecurity.getXsrfId(),
+      'POST', true, 'json',
       function (response) {
         console.log('Edited User')
       }
@@ -860,30 +727,8 @@ ADMIN.editUser = function (user) {
     console.log('Editing User: ' + userId + ', ' + firstName + ', ' + lastName + ', ' + newEmail)
     LIB.webRequest(
       '/custAdmin/editUserSubmit',
-      'ajaxHandler=MktSession&mktReqUid=' +
-        new Date().getTime() +
-        Ext.id(null, ':') +
-        '&cadUserId=' +
-        userId +
-        '&cadFirstName=' +
-        firstName +
-        '&cadLastName=' +
-        lastName +
-        ' [' +
-        role +
-        ']' +
-        '&cadEmail=' +
-        newEmail +
-        '&cadRole=' +
-        roles +
-        '&cadId=' +
-        id +
-        '&cadApiOnly=false&cadIsDeviceAuthEnabled=0' +
-        '&xsrfId=' +
-        MktSecurity.getXsrfId(),
-      'POST',
-      true,
-      'json',
+      'ajaxHandler=MktSession&mktReqUid=' + new Date().getTime() + Ext.id(null, ':') + '&cadUserId=' + userId + '&cadFirstName=' + firstName + '&cadLastName=' + lastName + ' [' + role + ']' + '&cadEmail=' + newEmail + '&cadRole=' + roles + '&cadId=' + id + '&cadApiOnly=false&cadIsDeviceAuthEnabled=0' + '&xsrfId=' + MktSecurity.getXsrfId(),
+      'POST', true, 'json',
       function (response) {
         console.log('Edited User')
       }

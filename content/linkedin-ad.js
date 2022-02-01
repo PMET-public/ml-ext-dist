@@ -2868,10 +2868,10 @@ var LIB = {
   },
 
   waitForElBySel: async function(selector) {
-    let cont
+    let cont, delay = 2
     while (!(cont && cont.parentNode)) {
       cont = document.querySelector(selector)
-      await new Promise(resolve => setTimeout(resolve, 5))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return cont
   },
@@ -2967,15 +2967,17 @@ var LIB = {
   },
 
   mktoPageGlobalReady: async function () {
+    let delay = 2
     while (!(LIB.isPropOfWindowObj('MktPage.savedState.custPrefix') && MktPage.userid)) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
 
   dlTokenReady: async function () {
+    let delay = 2
     while (!LIB.isPropOfWindowObj('Mkt3.DL.getDlToken')) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
@@ -2991,8 +2993,9 @@ var LIB = {
   },
 
   heapReady: async function () {
+    let delay = 2
     while (!LIB.isPropOfWindowObj('heap.loaded')) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise(resolve => setTimeout(resolve, delay *= 2))
     }
     return true
   },
@@ -3121,26 +3124,16 @@ var LIB = {
 }
 LIB.interceptXHR()
 console.log('LinkedIn > Running', MARKETO_EXT_VERSION)
-/**************************************************************************************
- *  This module contains all of the functionality needed for enabling dynamic ads
- *  within Google search.
- **************************************************************************************/
 
 var APP = APP || {}
-
-/**************************************************************************************
- *  This function waits for LinkedIn to return it's feed and then executes the given
- *  callback function.
- *  @param {Function} callback
- **************************************************************************************/
 
 APP.waitForResults = function (callback) {
   let isLinkedInFeed = window.setInterval(function () {
     if (
-      document.getElementsByClassName('core-rail').length > 0 &&
+      document.getElementsByClassName('core-rail').length &&
       document.getElementsByClassName('core-rail')[0].lastElementChild &&
       document.getElementsByClassName('core-rail')[0].lastElementChild.className == 'ember-view' &&
-      document.getElementsByClassName('core-rail')[0].lastElementChild.childNodes.length > 0
+      document.getElementsByClassName('core-rail')[0].lastElementChild.childNodes.length
     ) {
       window.clearInterval(isLinkedInFeed)
 
@@ -3148,7 +3141,7 @@ APP.waitForResults = function (callback) {
         callback()
       }
     }
-  }, 0)
+  }, 20)
 }
 
 /**************************************************************************************
@@ -3174,10 +3167,6 @@ APP.insertAd = function (ad) {
         post.getAttribute('data-id') &&
         post.getAttribute('data-id').search('^urn:li:activity:') != -1
       ) {
-        //&& !post.querySelector('.feed-shared-update__update-content-wrapper')){
-        //&& post.querySelector('article[class="feed-shared-update mh0 Elevation-2dp relative feed-shared-update--share share-update article ember-view"]')
-        // && post.querySelector('div[class="feed-shared-update__description feed-shared-inline-show-more-text ember-view"]')
-        //&& !post.querySelector('div[class="feed-shared-mini-update ember-view"]')) {
         topAd = post.cloneNode(true)
         break
       }
@@ -3220,7 +3209,6 @@ APP.insertAd = function (ad) {
       if (seeMore) {
         seeMore.remove()
       }
-
       if (actor) {
         actor.querySelector('[data-entity-hovercard-id]').innerText = ad.title
         actor.querySelector('[data-entity-hovercard-id]').setAttribute('data-entity-hovercard-id', '')
@@ -3232,7 +3220,6 @@ APP.insertAd = function (ad) {
           actor.firstElementChild.insertAdjacentHTML = '<span class="feed-shared-actor__description Sans-13px-black-55%">Promoted</span>'
         }
       }
-
       if (!image) {
         if (topAd.querySelector('a[class="app-aware-link ember-view"]')) {
           image = topAd.querySelector('a[class="app-aware-link ember-view"]')
@@ -3261,19 +3248,15 @@ APP.insertAd = function (ad) {
           imageDescription.getElementsByClassName('feed-shared-article__subtitle')[0].innerText = ad.linkText
         }
       }
-
       if (actor && actor.getElementsByTagName('time')[0]) {
         actor.getElementsByTagName('time')[0].remove()
       }
-
       if (likesCount) {
         likesCount.querySelector('span[aria-hidden]').innerText = '212 Likes'
       }
-
       if (commentsCount) {
         commentsCount.querySelector('span[aria-hidden]').innerText = '42 Comments'
       }
-
       feedSection.insertBefore(topAd, feedSection.childNodes[0])
       coreSection.scrollIntoView()
     } else {
@@ -3284,12 +3267,8 @@ APP.insertAd = function (ad) {
   }
 }
 
-/**************************************************************************************
- *  This function gets the ad_info_google cookie value.
- **************************************************************************************/
-
 APP.getAdInfo = function () {
-  let adInfo = LIB.getCookie('ad_info'),
+  let adInfo = LIB.getCookie('ad_info'), // ad_info_google cookie value
     adInfoSplit = adInfo.split(',,'),
     ad = {}
 
@@ -3307,14 +3286,4 @@ APP.getAdInfo = function () {
   return ad
 }
 
-/**************************************************************************************
- *  Main
- **************************************************************************************/
-
-let ad = APP.getAdInfo()
-
-window.onload = function () {
-  window.setTimeout(function () {
-    APP.waitForResults(APP.insertAd(ad))
-  }, 500)
-}
+APP.waitForResults(APP.insertAd(APP.getAdInfo()))

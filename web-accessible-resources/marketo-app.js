@@ -510,31 +510,15 @@ APP.trackTreeNodeEdits = function () {
         let nodeConfig = this.getNodeById(nodeIds[0]).attributes,
           workspaceName = APP.getWorkspaceName(nodeConfig.accessZoneId),
           workspaceInfo = '\n>*Workspace:* ' + workspaceName,
-          changedNodeInfo =
-            '\n>*Removed Node:* ' +
-            nodeConfig.compType +
-            ' | ' +
-            nodeConfig.text +
-            ' | ' +
-            'https://' +
-            window.location.host +
-            '/#' +
-            APP.getAssetCompCode(nodeConfig.compType) +
-            nodeConfig.compId,
+          changedNodeInfo = '\n>*Removed Node:* ' + nodeConfig.compType + ' | ' + nodeConfig.text + ' | ' + 'https://' + window.location.host + '/#' + APP.getAssetCompCode(nodeConfig.compType) + nodeConfig.compId,
           userInfo
-
         if (MktPage && MktPage.userName && MktPage.userid) {
           userInfo = '\n>*User:* ' + MktPage.userName + ' (' + MktPage.userid + ') '
         }
-
-        LIB.webRequest(
-          'https://hooks.slack.com/services/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',
+        LIB.webRequest( 'https://hooks.slack.com/services/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',
           '{"text": "*Unauthorized Changes*' + userInfo + workspaceInfo + changedNodeInfo + '"}',
-          'POST',
-          true,
-          ''
+          'POST', true, ''
         )
-
         LIB.heapTrack('track', {name: 'Unauthorized Node Removed', assetName: nodeConfig.text, assetId: nodeConfig.compId, assetType: nodeConfig.compType, workspaceId: nodeConfig.accessZoneId, workspaceName: workspaceName})
 
         ;(violationMsg.notify = 'Do not make changes to the ' + workspaceName + ' Workspace!'),
@@ -561,31 +545,16 @@ APP.trackTreeNodeEdits = function () {
         let nodeConfig = this.getNodeById(nodeId).attributes,
           workspaceName = APP.getWorkspaceName(nodeConfig.accessZoneId),
           workspaceInfo = '\n>*Workspace:* ' + workspaceName,
-          changedNodeInfo =
-            '\n>*Renamed Node:* ' +
-            nodeConfig.compType +
-            ' | From \'' +
-            nodeConfig.text +
-            '\' to \'' +
-            text +
-            '\' | ' +
-            'https://' +
-            window.location.host +
-            '/#' +
-            APP.getAssetCompCode(nodeConfig.compType) +
-            nodeConfig.compId,
+          changedNodeInfo = '\n>*Renamed Node:* ' + nodeConfig.compType + ' | From \'' + nodeConfig.text + '\' to \'' + text + '\' | ' + 'https://' + window.location.host + '/#' + APP.getAssetCompCode(nodeConfig.compType) + nodeConfig.compId,
           userInfo
 
         if (MktPage && MktPage.userName && MktPage.userid) {
           userInfo = '\n>*User:* ' + MktPage.userName + ' (' + MktPage.userid + ') '
         }
 
-        LIB.webRequest(
-          'https://hooks.slack.com/services/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',
+        LIB.webRequest( 'https://hooks.slack.com/services/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',
           '{"text": "*Unauthorized Changes*' + userInfo + workspaceInfo + changedNodeInfo + '"}',
-          'POST',
-          true,
-          ''
+          'POST', true, ''
         )
 
         LIB.heapTrack('track', {name: 'Unauthorized Node Renamed', assetName: nodeConfig.text, assetId: nodeConfig.compId, assetType: nodeConfig.compType, workspaceId: nodeConfig.accessZoneId, workspaceName: workspaceName})
@@ -659,17 +628,7 @@ APP.disableConfirmationMessage = function () {
           console.log('Marketo App > Closing: Smart Campaign Delete Confirmation Message')
           this._doClose()
         } else {
-          Ext4.Msg.confirmDelete({
-            title: title,
-            msg: msg,
-            minHeight: 300,
-            fn: function (buttonId) {
-              if (buttonId === 'ok') {
-                this._doClose()
-              }
-            },
-            scope: this
-          })
+          Ext4.Msg.confirmDelete({ title: title, msg: msg, minHeight: 300, fn: function (buttonId) { if (buttonId === 'ok') { this._doClose() } }, scope: this })
         }
       } else {
         this._doClose()
@@ -1286,22 +1245,13 @@ APP.overrideNewProgramCreate = function () {
         if (this.title == 'New Program') {
           if (this.getInputItems()) {
             if (this.getInputItems()[1] && this.getInputItems()[1].fieldLabel == 'Name') {
-              if (
-                this.getInputItems()[1]
-                  .getValue()
-                  .toLowerCase()
-                  .search(userName + '$') == -1
-              ) {
+              if ( this.getInputItems()[1] .getValue() .toLowerCase() .search(userName + '$') == -1 ) {
                 this.getInputItems()[1].setValue(this.getInputItems()[1].getValue() + ' - ' + userName)
               }
             } else {
               for (ii = 0; ii < this.getInputItems().length; ii++) {
                 if (this.getInputItems()[ii] && this.getInputItems()[ii].fieldLabel == 'Name') {
-                  if (
-                    this.getInputItems()[ii].getValue()
-                      .toLowerCase()
-                      .search(userName + '$') == -1
-                  ) {
+                  if ( this.getInputItems()[ii].getValue() .toLowerCase() .search(userName + '$') == -1 ) {
                     this.getInputItems()[ii].setValue(this.getInputItems()[ii].getValue() + ' - ' + userName)
                   }
                 }
@@ -1311,22 +1261,13 @@ APP.overrideNewProgramCreate = function () {
         } else if (this.title == 'New Segmentation') {
           if (this.findByType('textfield')) {
             if (this.findByType('textfield')[0] && this.findByType('textfield')[0].fieldLabel == 'Name') {
-              if (
-                this.findByType('textfield')[0]
-                  .getValue()
-                  .toLowerCase()
-                  .search(userName + '$') == -1
-              ) {
+              if ( this.findByType('textfield')[0] .getValue() .toLowerCase() .search(userName + '$') == -1 ) {
                 this.findByType('textfield')[0].setValue(this.findByType('textfield')[0].getValue() + ' - ' + userName)
               }
             } else {
               for (ii = 0; ii < this.findByType('textfield').length; ii++) {
                 if (this.findByType('textfield')[ii] && this.findByType('textfield')[ii].fieldLabel == 'Name') {
-                  if (
-                    this.findByType('textfield')[ii].getValue()
-                      .toLowerCase()
-                      .search(userName + '$') == -1
-                  ) {
+                  if ( this.findByType('textfield')[ii].getValue() .toLowerCase() .search(userName + '$') == -1 ) {
                     this.findByType('textfield')[ii].setValue(this.findByType('textfield')[ii].getValue() + ' - ' + userName)
                   }
                 }
@@ -1336,11 +1277,7 @@ APP.overrideNewProgramCreate = function () {
         }
       }
 
-      if (this.submitInProgress) {
-        return
-      }
-
-      if (this.beforeSubmitCallback() === false) {
+      if (this.submitInProgress || !this.beforeSubmitCallback()) {
         return
       }
 
@@ -1354,15 +1291,7 @@ APP.overrideNewProgramCreate = function () {
 
       if (this.showProgressModal) {
         this.hide()
-
-        this.progressModal = Ext.MessageBox.show({
-          title: MktLang.getStr('ModalForm.Please_wait'),
-          msg: this.progressMsg,
-          progress: true,
-          wait: true,
-          width: 200,
-          closable: false
-        })
+        this.progressModal = Ext.MessageBox.show({ title: MktLang.getStr('ModalForm.Please_wait'), msg: this.progressMsg, progress: true, wait: true, width: 200, closable: false })
       } else {
         MktSession.clockCursor()
       }
@@ -1425,12 +1354,7 @@ APP.overrideAssetSaveEdit = function () {
               }
             }
 
-            if (
-              this.getTitleField()
-                .getValue()
-                .toLowerCase()
-                .search(userName + '$') == -1
-            ) {
+            if ( this.getTitleField() .getValue() .toLowerCase() .search(userName + '$') == -1 ) {
               this.getTitleField().setValue(this.getTitleField().getValue() + ' - ' + userName)
             }
           }
@@ -1465,14 +1389,7 @@ APP.overrideAssetSaveEdit = function () {
             viewPanel.show(true, 0.2)
             viewPanel.body.update(panelObj.viewTemplate.apply(panelObj))
 
-            el.animate(
-              {
-                height: {
-                  from: this.getHeight(),
-                  to: this.origHeight
-                }
-              },
-              0.25,
+            el.animate( { height: { from: this.getHeight(), to: this.origHeight } }, 0.25,
               function () {
                 panelObj.setHeight(panelObj.origHeight)
                 panelObj.body.setHeight(panelObj.origHeight)
@@ -1529,14 +1446,7 @@ APP.overrideAssetSaveEdit = function () {
             viewPanel.show(true, 0.2)
             viewPanel.body.update(panelObj.viewTemplate.apply(panelObj))
 
-            el.animate(
-              {
-                height: {
-                  from: this.getHeight(),
-                  to: this.origHeight
-                }
-              },
-              0.25,
+            el.animate( { height: { from: this.getHeight(), to: this.origHeight } }, 0.25,
               function () {
                 panelObj.setHeight(panelObj.origHeight)
                 panelObj.body.setHeight(panelObj.origHeight)
@@ -3098,9 +3008,8 @@ APP.disableMenus = function () {
           }
         }
       } else {
-        let ii,
-          disable = APP.evaluateMenu('button', null, null, null)
-        for (ii = 0; ii < me.items.items.length; ii++) {
+        let disable = APP.evaluateMenu('button', null, null, null)
+        for (let ii = 0; ii < me.items.items.length; ii++) {
           switch (me.items.items[ii].action) {
             // Admin > Marketo Custom Activities/Objects & Mobile Apps > Activities/Objects & Mobile Apps Tree > Right-click Menu
             case 'publish':
@@ -4787,17 +4696,8 @@ APP.disableNurturePrograms = function () {
   ) {
     let {compId} = MktCanvas.getActiveTab().config
     console.log('Marketo App > Executing: Disabling Nurture Program')
-    LIB.webRequest(
-      '/marketingEvent/setProgramStatusSubmit',
-      'ajaxHandler=MktSession&mktReqUid=' +
-        new Date().getTime() +
-        Ext.id(null, ':') +
-        '&compId=' + compId +
-        '&_json={"programId":' + compId +
-        ',"statusValue":"off"}&xsrfId=' + MktSecurity.getXsrfId(),
-      'POST',
-      true,
-      'json',
+    LIB.webRequest( '/marketingEvent/setProgramStatusSubmit', 'ajaxHandler=MktSession&mktReqUid=' + new Date().getTime() + Ext.id(null, ':') + '&compId=' + compId + '&_json={"programId":' + compId + ',"statusValue":"off"}&xsrfId=' + MktSecurity.getXsrfId(),
+      'POST', true, 'json',
       function (response) {
         let result = JSON.parse(response)
         if (result.JSONResults.appvars.result == 'Success') {
@@ -5362,16 +5262,10 @@ let isMktPageApp = window.setInterval(function () {
         APP.disableNurturePrograms()
       } else if (LIB.currUrlFragment == mktoAdminSalesforceFragment || LIB.currUrlFragment == mktoAdminDynamicsFragment) {
         console.log('Marketo App > Location: Admin > CRM')
-        APP.hideOtherToolbarItems([{
-          id: 'enableSync', //Enable/Disable Sync
-          action: 'setVisible'
-        }])
+        APP.hideOtherToolbarItems([{ id: 'enableSync', action: 'setVisible' }])
       } else if (LIB.currUrlFragment == mktoAdminRcaCustomFieldSync) {
         console.log('Marketo App > Location: Admin > Revenue Cycle Analytics > Custom Field Sync')
-        APP.hideOtherToolbarItems([{
-          id: 'cadChangeButton', //Edit Sync Option
-          action: 'setVisible'
-        }])
+        APP.hideOtherToolbarItems([{ id: 'cadChangeButton', action: 'setVisible' }])
       } else if (LIB.currUrlFragment.search(mktoAnalyzersFragmentMatch) != -1) {
         console.log('Marketo App > Location: Golden Analytics')
         APP.updateNavBar()
