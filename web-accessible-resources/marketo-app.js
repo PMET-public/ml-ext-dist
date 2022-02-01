@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.16'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.17'; // version also automatically injected via gulp using manifest.json
 
 isExtDevMode = true
 console.log('Marketo App > Running', MARKETO_EXT_VERSION)
