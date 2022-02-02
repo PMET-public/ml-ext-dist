@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.18'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.19'; // version also automatically injected via gulp using manifest.json
 
 isExtDevMode = true
 // catch all for globally defined functions used by any file
@@ -34,6 +34,7 @@ var LIB = {
   mktoEmailInsightsLink: 'https://insights.marketolive.com/email',
   mktoEmailDeliverabilityToolsLink: 'https://250ok.com/login?submit=true',
   mktoAccountStringMaster: 'mktodemolivemaster',
+  mktoAccountStringMasterMEUE: 'mktodemoaccount544',
   mktoAccountStringABDemoMaster: 'mktodemoaccount544',
   mktoAccountString106: 'mktodemoaccount106',
   mktoAccountString106d: 'mktodemoaccount106d',
@@ -3125,27 +3126,13 @@ var LIB = {
 LIB.interceptXHR()
 console.log('Global Landing Page > Running', MARKETO_EXT_VERSION)
 // eslint-disable-next-line no-var
-var MARKETO_LIVE_LANDING_PAGE = 'https://marketolive.com/m3/pluginv3/marketo-live-landing-page.js',
-  mktoLiveProdLandingPageDomain = 'http://pages.marketolive.com',
-  mktoLiveDevLandingPageDomain = 'http://dev.pages.marketolive.com',
-  mktoLiveLandingPageHostsMatch = 'http://na-sjdemo1.marketo.com',
-  mktoLiveDevMunchkinId = '685-BTN-772',
+var mktoLiveDevMunchkinId = '685-BTN-772',
   mktoLiveProdMunchkinId = '185-NGX-811',
   mktoLiveNewPodMunchkinId = '924-LFC-514',
   mktoLiveMunchkinIdsMatch = '(' + mktoLiveProdMunchkinId + '|' + mktoLiveDevMunchkinId + '|' + mktoLiveNewPodMunchkinId + ')',
-  mktoLiveLandingPageDomainMatch =
-    '^(' +
-    mktoLiveProdLandingPageDomain +
-    '|' +
-    mktoLiveDevLandingPageDomain +
-    '|' +
-    mktoLiveLandingPageHostsMatch +
-    '/lp/' +
-    mktoLiveMunchkinIdsMatch +
-    ')/'
-
+  mktoLiveLandingPageDomainMatch = '^https?://(pages.marketolive.com|dev.pages.marketolive.com|na-sjdemo1.marketo.com/lp/' + mktoLiveMunchkinIdsMatch + ')/'
 
 if (window.location.href.search(mktoLiveLandingPageDomainMatch) != -1) {
   console.log('Global Landing Page > Location: MarketoLive Landing Page')
-  LIB.loadScript(MARKETO_LIVE_LANDING_PAGE)
+  LIB.loadScript('https://marketolive.com/m3/pluginv3/marketo-live-landing-page.js')
 }

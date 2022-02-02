@@ -5,7 +5,7 @@
   "author": "Marketo Demo Services",
   "name": "MarketoLive",
   "description": "This extension is for Marketo employees and partners who have access to the MarketoLive demo environment.",
-  "version": "5.4.18",
+  "version": "5.4.19",
   "background": {
     "persistent": true,
     "scripts": [
@@ -19,73 +19,48 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://*.marketo.com/*"
-      ],
-      "js": [
-        "content/marketo.js"
-      ],
+      "matches": [ "*://*.marketo.com/*" ],
+      "js": [ "content/marketo.js" ],
       "all_frames": true,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://*.marketodesigner.com/*"
-      ],
-      "js": [
-        "content/marketo-designer.js"
-      ],
+      "matches": [ "*://*.marketodesigner.com/*" ],
+      "js": [ "content/marketo-designer.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
     {
       "matches": [
+        "*://www.marketolive.com/*",
         "*://pages.marketolive.com/*",
         "*://dev.pages.marketolive.com/*"
       ],
-      "js": [
-        "content/marketolive-landing-page.js"
-      ],
+      "js": [ "content/marketolive-landing-page.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://adobe.okta.com/*"
-      ],
-      "js": [
-        "content/okta.js"
-      ],
+      "matches": [ "*://adobe.okta.com/*" ],
+      "js": [ "content/okta.js" ],
       "all_frames": false,
       "run_at": "document_idle"
     },
     {
-      "matches": [
-        "*://250ok.com/*"
-      ],
-      "js": [
-        "content/250ok.js"
-      ],
+      "matches": [ "*://250ok.com/*" ],
+      "js": [ "content/250ok.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://toutapp.com/*"
-      ],
-      "js": [
-        "content/tout-app.js"
-      ],
+      "matches": [ "*://toutapp.com/*" ],
+      "js": [ "content/tout-app.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://mail.google.com/*"
-      ],
-      "js": [
-        "content/gmail.js"
-      ],
+      "matches": [ "*://mail.google.com/*" ],
+      "js": [ "content/gmail.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
@@ -100,59 +75,37 @@
         "*://www.google.co.uk/search?dynamicAd=true&*",
         "*://www.google.com/search?dynamicAd=true&*"
       ],
-      "js": [
-        "content/google-search-ad.js"
-      ],
+      "js": [ "content/google-search-ad.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://www.facebook.com/?dynamicAd=true&*"
-      ],
-      "js": [
-        "content/facebook-ad.js"
-      ],
+      "matches": [ "*://www.facebook.com/?dynamicAd=true&*" ],
+      "js": [ "content/facebook-ad.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://www.linkedin.com/feed/?dynamicAd=true&*"
-      ],
-      "js": [
-        "content/linkedin-ad.js"
-      ],
+      "matches": [ "*://www.linkedin.com/feed/?dynamicAd=true&*" ],
+      "js": [ "content/linkedin-ad.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://www.economist.com/?dynamicAd=true&*"
-      ],
-      "js": [
-        "content/economist-ad.js"
-      ],
+      "matches": [ "*://www.economist.com/?dynamicAd=true&*" ],
+      "js": [ "content/economist-ad.js" ],
       "all_frames": false,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://marketolive.crm.dynamics.com/*"
-      ],
-      "js": [
-        "content/dynamics.js"
-      ],
+      "matches": [ "*://marketolive.crm.dynamics.com/*" ],
+      "js": [ "content/dynamics.js" ],
       "all_frames": true,
       "run_at": "document_end"
     },
     {
-      "matches": [
-        "*://*.visual.force.com/*"
-      ],
-      "js": [
-        "content/sfdc.js"
-      ],
+      "matches": [ "*://*.visual.force.com/*" ],
+      "js": [ "content/sfdc.js" ],
       "all_frames": true,
       "run_at": "document_end"
     }

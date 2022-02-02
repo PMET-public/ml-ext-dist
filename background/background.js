@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.18'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.19'; // version also automatically injected via gulp using manifest.json
 
 const filesInDirectory = dir => new Promise (resolve =>
     dir.createReader ().readEntries (entries =>
@@ -71,6 +71,7 @@ var LIB = {
   mktoEmailInsightsLink: 'https://insights.marketolive.com/email',
   mktoEmailDeliverabilityToolsLink: 'https://250ok.com/login?submit=true',
   mktoAccountStringMaster: 'mktodemolivemaster',
+  mktoAccountStringMasterMEUE: 'mktodemoaccount544',
   mktoAccountStringABDemoMaster: 'mktodemoaccount544',
   mktoAccountString106: 'mktodemoaccount106',
   mktoAccountString106d: 'mktodemoaccount106d',

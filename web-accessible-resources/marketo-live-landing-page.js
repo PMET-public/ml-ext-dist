@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.18'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.19'; // version also automatically injected via gulp using manifest.json
 
 isExtDevMode = true
 // catch all for globally defined functions used by any file
@@ -34,6 +34,7 @@ var LIB = {
   mktoEmailInsightsLink: 'https://insights.marketolive.com/email',
   mktoEmailDeliverabilityToolsLink: 'https://250ok.com/login?submit=true',
   mktoAccountStringMaster: 'mktodemolivemaster',
+  mktoAccountStringMasterMEUE: 'mktodemoaccount544',
   mktoAccountStringABDemoMaster: 'mktodemoaccount544',
   mktoAccountString106: 'mktodemoaccount106',
   mktoAccountString106d: 'mktodemoaccount106d',
@@ -3227,9 +3228,7 @@ if (!origCookie) {
 }
 
 ;(function () {
-  var didInit = false,
-    s,
-    origMunchkinInit
+  var didInit = false, s, origMunchkinInit
 
   function overloadMunchkinInit() {
     if (typeof origMunchkinInit !== 'function') {
@@ -3260,31 +3259,16 @@ if (!origCookie) {
   }
 
   function resetMunchkinCookie(munchkinId, cookieAnon, callback) {
-    document.cookie =
-      '_mkto_trk=;domain=.' +
-      hostSplit[hostSplit.length - 2] +
-      '.' +
-      hostSplit[hostSplit.length - 1] +
-      ';path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT'
+    document.cookie = '_mkto_trk=;domain=.' + hostSplit[hostSplit.length - 2] + '.' + hostSplit[hostSplit.length - 1] + ';path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT'
     console.log('Removed > Cookie: _mkto_trk')
     overloadMunchkinInit()
-    Munchkin.init(
-      munchkinId,
-      {
-        cookieLifeDays: 365,
-        cookieAnon: cookieAnon,
-        disableClickDelay: true
-      },
-      callback
-    )
+    Munchkin.init( munchkinId, { cookieLifeDays: 365, cookieAnon: cookieAnon, disableClickDelay: true }, callback )
   }
 
   function resetMasterMunchkinCookie(callback) {
     let oktaUsername = LIB.getCookie('okta_username')
-
     if (oktaUsername) {
       let email = 'mktodemosvcs+' + oktaUsername + '@gmail.com'
-
       document.cookie =
         '_mkto_trk=;domain=' +
         hostSplit[hostSplit.length - 2] +
@@ -3295,11 +3279,7 @@ if (!origCookie) {
       overloadMunchkinInit()
       Munchkin.init(
         '185-NGX-811',
-        {
-          cookieLifeDays: 365,
-          cookieAnon: false,
-          disableClickDelay: true
-        },
+        { cookieLifeDays: 365, cookieAnon: false, disableClickDelay: true },
         function () {
           console.log('Associating > Lead : ' + email)
           overloadMunchkinFunction()
@@ -3313,15 +3293,7 @@ if (!origCookie) {
       )
     } else {
       if (origCookie) {
-        document.cookie =
-          '_mkto_trk=' +
-          origCookie +
-          ';domain=' +
-          hostSplit[hostSplit.length - 2] +
-          '.' +
-          hostSplit[hostSplit.length - 1] +
-          ';path=/;expires=' +
-          new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toUTCString()
+        document.cookie = '_mkto_trk=' + origCookie + ';domain=' + hostSplit[hostSplit.length - 2] + '.' + hostSplit[hostSplit.length - 1] + ';path=/;expires=' + new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toUTCString()
         console.log('Restored > Cookie: _mkto_trk = ' + origCookie)
         console.log('Restored > Cookie: _mkto_trk = ' + LIB.getCookie('_mkto_trk'))
       }
@@ -3365,16 +3337,7 @@ if (!origCookie) {
               let formVals = form.getValues()
               if (isMockLead == 'true') {
                 form.onSuccess(function (values, followUpUrl) {
-                  window.location.href =
-                    window.location.origin +
-                    window.location.pathname +
-                    '?submit=' + submit +
-                    '&isMockLead=false' +
-                    '&utmTerm=' + utmTerm +
-                    '&utmMedium=' + utmMedium +
-                    '&utmCampaign=' + utmCampaign +
-                    '&utmSource=' + utmSource +
-                    '&mockLead=' + values.Email
+                  window.location.href = window.location.origin + window.location.pathname + '?submit=' + submit + '&isMockLead=false' + '&utmTerm=' + utmTerm + '&utmMedium=' + utmMedium + '&utmCampaign=' + utmCampaign + '&utmSource=' + utmSource + '&mockLead=' + values.Email
                   return false
                 })
 
