@@ -3699,49 +3699,48 @@ APP.disableDesignerSaving = function (assetType, mode) {
         case 'email':
           switch (mode) {
             case 'edit':
-              intervalRef = window.setInterval(function () {
-                try {
-                  let asset = LIB.getMkt3CtlrAsset('Mkt3.controller.editor.email2.EmailEditor', 'getEmail'),
-                    assetNode = asset.getNodeJson()
+              // eslint-disable-next-line no-var
+              var isEmailEditor = window.setInterval(function () {
+                if (
+                  typeof Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor') !== 'undefined' &&
+                  Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor') &&
+                  Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor').getEmail() &&
+                  Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor').getEmail().getNodeJson()
+                ) {
                   console.log('Marketo App > Disabling: Email Editor: Saving & Toolbar Menus')
-                  window.clearInterval(intervalRef)
+
+                  window.clearInterval(isEmailEditor)
+
+                  // eslint-disable-next-line no-var
+                  var asset = Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor').getEmail()
+                  assetNode = asset.getNodeJson()
                   menuItems = [
+                    // Toolbar Menu
+                    //"email2EditorToolbar [action=editSettings]", // Email Settings
+                    //"email2EditorToolbar [action=editCode]", // Edit Code
+                    //"email2EditorToolbar [action=preview]", // Preview
                     // Actions Menu
                     'emailEditor2 menu [action=approveEmail]', // Approve and Close
                     'emailEditor2 menu [action=sendTestEmail]', // Send Sample
+                    //"emailEditor2 menu [action=editSettings]", // Email Settings
+                    //"emailEditor2 menu [action=editCode]", // Edit Code
+                    //"emailEditor2 menu [action=downloadHtml]", // Download HTML
                     'emailEditor2 menu [action=uploadImage]', // Upload Image or File
                     'emailEditor2 menu [action=grabImages]', // Grab Images from Web
                     'emailEditor2 menu [action=saveAsTemplate]' // Save as Template
                   ]
+
                   disableDesignerAsset(assetNode, menuItems)
                   LIB.overlayEmail('edit')
                   LIB.saveEmailEdits('edit', asset)
-                // eslint-disable-next-line no-empty
-                } catch (e) {}
-                // if (
-                //   typeof Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor') !== 'undefined' &&
-                //   Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor') &&
-                //   Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor').getEmail() &&
-                //   Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor').getEmail().getNodeJson()
-                // ) {
-                //   console.log('Marketo App > Disabling: Email Editor: Saving & Toolbar Menus')
-                //   window.clearInterval(intervalRef)
-                //   let asset = Mkt3.app.controllers.get('Mkt3.controller.editor.email2.EmailEditor').getEmail()
-                //   assetNode = asset.getNodeJson()
-                //   menuItems = [
-                //     // Actions Menu
-                //     'emailEditor2 menu [action=approveEmail]', // Approve and Close
-                //     'emailEditor2 menu [action=sendTestEmail]', // Send Sample
-                //     'emailEditor2 menu [action=uploadImage]', // Upload Image or File
-                //     'emailEditor2 menu [action=grabImages]', // Grab Images from Web
-                //     'emailEditor2 menu [action=saveAsTemplate]' // Save as Template
-                //   ]
-                //   disableDesignerAsset(assetNode, menuItems)
-                //   LIB.overlayEmail('edit')
-                //   LIB.saveEmailEdits('edit', asset)
-                // }
+                }
               }, 0)
               break
+
+
+
+
+
             case 'preview':
               intervalRef = window.setInterval(function () {
                 if (
@@ -4181,7 +4180,7 @@ APP.disableFormSaveButtons = function () {
         })
       }
 
-      let {rendered} = me
+      var rendered = me.rendered
       if (rendered && me.isVisible()) {
         if (me.toFrontOnShow && me.floating) {
           me.toFront()
@@ -4191,7 +4190,7 @@ APP.disableFormSaveButtons = function () {
           me.hidden = false
           if (!rendered && (me.autoRender || me.floating)) {
             me.doAutoRender()
-            ;({rendered} = me.rendered)
+            rendered = me.rendered
           }
           if (rendered) {
             me.beforeShow()

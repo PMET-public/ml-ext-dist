@@ -3392,12 +3392,7 @@ POPUP.openColorPicker = function (companyNameSubmitted) {
  *  Main
  **************************************************************************************/
 
-background.heapTrack({
-  name: 'Popup',
-  app: 'Extension',
-  area: 'Popup',
-  version: chrome.app.getDetails().version
-})
+background.heapTrack({ name: 'Popup', app: 'Extension', area: 'Popup', version: chrome.app.getDetails().version })
 
 LIB.loadScript(LIB.HEAP_ANALYTICS_SCRIPT_LOCATION)
 
