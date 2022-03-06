@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.21'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.22'; // version also automatically injected via gulp using manifest.json
 
 isExtDevMode = true
 // catch all for globally defined functions used by any file
@@ -3146,7 +3146,28 @@ let sfInterestingMoments = [
     'Visited 5+ Web Pages in Past 7 Days',
     'Clicks CTA in Email'
   ],
-  counter = 0
-document.querySelectorAll('td.dataCell:nth-child(4)').forEach(n => {
-  n.innerHTML = n.innerHTML.replace(/no activity.*/i, sfInterestingMoments[counter++ % sfInterestingMoments.length])
-})
+  counter = 0,
+  tds = document.querySelectorAll('td.dataCell:nth-child(4)'),
+  tdsAreRepeating = true,
+  replaceRegex = /no activity.*/i // look for no activity, to replace with random
+
+if (tds.length > 4) {
+
+  // if the 1st 5 are the same, assume undesired data and replace all with random
+  let txtOf1st = tds[0].textContent
+  for (let i = 1; i < 6; i++) {
+    if (tds[i].textContent != txtOf1st) {
+      tdsAreRepeating = false
+      break
+    }
+  }
+  if (tdsAreRepeating) {
+    replaceRegex = /.*/
+  }
+
+  tds.forEach(n => {
+    n.innerHTML = n.innerHTML.replace(replaceRegex, sfInterestingMoments[counter++ % sfInterestingMoments.length])
+  })
+
+}
+
