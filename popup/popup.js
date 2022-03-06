@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.20'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.21'; // version also automatically injected via gulp using manifest.json
 
 isExtDevMode = true
 // catch all for globally defined functions used by any file
@@ -3730,7 +3730,7 @@ chrome.storage.local.get(['userAttemptedUpdate'], result => {
   // if user clicked the update cmd, reset the attempt flag and reload
   if (result['userAttemptedUpdate']) {
     chrome.storage.local.set({userAttemptedUpdate: false})
-    // chrome.runtime.reload()
+    chrome.runtime.reload()
   }
 })
 
