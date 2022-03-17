@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.23'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.24'; // version also automatically injected via gulp using manifest.json
 
 console.log('Heap Analytics (MarketoLive) > Running', MARKETO_EXT_VERSION)
 let prod = '3521051524',

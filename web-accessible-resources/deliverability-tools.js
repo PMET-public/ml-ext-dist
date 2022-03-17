@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.23'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.24'; // version also automatically injected via gulp using manifest.json
 
 // catch all for globally defined functions used by any file
 
@@ -3212,19 +3212,16 @@ DELIVERABILITY.removeSubmitButtons = function () {
 }
 
 DELIVERABILITY.toRemoveSubmitButtons = function (minVersion) {
-  chrome.runtime.sendMessage(
-    extensionId,
-    {
-      action: 'checkExtensionVersion',
-      minVersion: minVersion
-    },
-    null,
-    function (response) {
-      if (response == null || !response.isValidExtension) {
-        DELIVERABILITY.removeSubmitButtons()
-      }
+  chrome.runtime.sendMessage(LIB.getExtensionId(), {
+    action: 'checkExtensionVersion',
+    minVersion: minVersion
+  },
+  null,
+  function (response) {
+    if (response == null || !response.isValidExtension) {
+      DELIVERABILITY.removeSubmitButtons()
     }
-  )
+  })
 }
 
 let userId = 'marketolive@marketo.com',

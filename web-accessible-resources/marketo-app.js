@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.23'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.24'; // version also automatically injected via gulp using manifest.json
 
 console.log('Marketo App > Running', MARKETO_EXT_VERSION)
 /**************************************************************************************
@@ -317,7 +317,7 @@ APP.sendMktoMessage = function (accountString, roleName, mktoUserId) {
       numOfTimesPerDay: 1
     }
 
-  chrome.runtime.sendMessage(extensionId, extensionUpdateMsg)
+  chrome.runtime.sendMessage(LIB.getExtensionId(), extensionUpdateMsg)
 
 }
 
@@ -486,7 +486,7 @@ APP.trackTreeNodeEdits = function () {
         LIB.heapTrack('track', {name: 'Unauthorized Node Added', assetName: nodeConfig.text, assetId: nodeConfig.compId, assetType: nodeConfig.compType, workspaceId: workspaceId, workspaceName: workspaceName})
 
         ;(violationMsg.notify = 'Do not make changes to the ' + workspaceName + ' Workspace!'),
-        chrome.runtime.sendMessage(extensionId, violationMsg)
+        chrome.runtime.sendMessage(LIB.getExtensionId(), violationMsg)
       }
       origExplorerPanelAddNode.apply(this, arguments)
     }
@@ -521,7 +521,7 @@ APP.trackTreeNodeEdits = function () {
         LIB.heapTrack('track', {name: 'Unauthorized Node Removed', assetName: nodeConfig.text, assetId: nodeConfig.compId, assetType: nodeConfig.compType, workspaceId: nodeConfig.accessZoneId, workspaceName: workspaceName})
 
         ;(violationMsg.notify = 'Do not make changes to the ' + workspaceName + ' Workspace!'),
-        chrome.runtime.sendMessage(extensionId, violationMsg)
+        chrome.runtime.sendMessage(LIB.getExtensionId(), violationMsg)
       }
       origExplorerPanelRemoveNodes.apply(this, arguments)
     }
@@ -560,7 +560,7 @@ APP.trackTreeNodeEdits = function () {
 
         ;(violationMsg.notify =
           'You are not permitted to make changes to ' + workspaceName + '!\n\nThe Demo Services Team has been notified of this violation.'),
-        chrome.runtime.sendMessage(extensionId, violationMsg)
+        chrome.runtime.sendMessage(LIB.getExtensionId(), violationMsg)
       }
       origExplorerPanelUpdateNodeText.apply(this, arguments)
     }
@@ -4845,18 +4845,11 @@ let isMktPageApp = window.setInterval(function () {
 
     APP.setInstanceInfo(accountString)
 
-    chrome.runtime.sendMessage(
-      extensionId,
-      {
-        action: 'checkExtensionVersion',
-        minVersion: extensionMinVersion
-      },
+    chrome.runtime.sendMessage(LIB.getExtensionId(), {action: 'checkExtensionVersion', minVersion: extensionMinVersion},
       null,
       function (response) {
         if (response && response.isValidExtension) {
-          chrome.runtime.sendMessage(
-            extensionId,
-            {action: 'checkBadExtension'},
+          chrome.runtime.sendMessage(LIB.getExtensionId(), {action: 'checkBadExtension'},
             null,
             function (response) {
               if (response && response.isValidExtension) {
@@ -4899,7 +4892,7 @@ let isMktPageApp = window.setInterval(function () {
       if (mktoRole != null) {
         mktoRole = mktoRole[0].replace(/^\[([^\]]+)]$/, '$1')
       }
-      chrome.runtime.sendMessage(extensionId, {
+      chrome.runtime.sendMessage(LIB.getExtensionId(), {
         action: 'setMktoCookies',
         mktoUserId: MktPage.userid,
         mktoName: MktPage.userName.replace(/ ?\[[^\]]+\]/, ''),
@@ -5216,12 +5209,7 @@ let isMktPageApp = window.setInterval(function () {
       window.clearInterval(isMktPageApp)
       if (MktPage.savedState && MktPage.savedState.munchkinId) {
         console.log('Marketo App > checkMktoCookie Msg')
-        chrome.runtime.sendMessage(
-          extensionId,
-          {
-            action: 'checkMktoCookie',
-            munchkinId: MktPage.savedState.munchkinId
-          },
+        chrome.runtime.sendMessage(LIB.getExtensionId(), {action: 'checkMktoCookie', munchkinId: MktPage.savedState.munchkinId},
           null,
           function (response) {
             if (!response || !response.isAdmin) {

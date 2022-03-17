@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.23'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v5.4.24'; // version also automatically injected via gulp using manifest.json
 
 // catch all for globally defined functions used by any file
 
@@ -3414,7 +3414,7 @@ APP.heapTrack = function () {
  *  Main
  **************************************************************************************/
 
-chrome.runtime.sendMessage(extensionId, {action: 'checkMktoCookie'}, null,
+chrome.runtime.sendMessage(LIB.getExtensionId(), {action: 'checkMktoCookie'}, null,
   function (response) {
     if (response && response.isMktoLive && !response.isAdmin) {
       if (window.location.hostname != mktoLiveSeoHostname) {
