@@ -166,7 +166,7 @@ APP.updateView = function () {
     LIB.overrideAnalyticsTiles()
   }
   if (LIB.isPropOfWindowObj('Mkt3.DL.dl.dlCompCode')) {
-    currCompFragment = Mkt3.DL.dl.dlCompCode
+   let currCompFragment = Mkt3.DL.dl.dlCompCode
     if (currCompFragment.search(mktoDesignersFragmentMatch) != -1) {
       console.log('Marketo Demo App > Location: Designers/Wizards')
       switch (currCompFragment) {

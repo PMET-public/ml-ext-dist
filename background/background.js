@@ -2803,9 +2803,11 @@ var LIB = {
 
     hiddenTile1 && hiddenTile1.remove()
     hiddenTile2 && hiddenTile2.remove()
-
+    debugger
     for (let i = 0; i < tilesTextContainers.length; i++) {
       let tile = tilesTextContainers[i]
+      console.log('tile innerHTML'+tile.innerHTML,'tile txtcontent'+tile.textContent);
+  
       switch (tile.textContent) {
         case 'Performance Insights':
           performanceInsightsTile = tile.parentNode.parentNode.parentNode
@@ -2817,6 +2819,7 @@ var LIB = {
           }
           break
         case 'Email Insights':
+          debugger
           if (!emailInsightsTile) {
             emailInsightsTile = tile.parentNode.parentNode.parentNode
             LIB.replaceLinkInElHTML(emailInsightsTile, LIB.mktoEmailInsightsLink)
