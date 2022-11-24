@@ -1,18 +1,17 @@
 {
-    "manifest_version": 2,
-    "minimum_chrome_version": "23",
+    "manifest_version": 3,
+    "minimum_chrome_version": "70",
     "update_url": "https://clients2.google.com/service/update2/crx",
     "author": "Marketo Demo Services",
     "name": "MarketoLive",
     "description": "This extension is for Marketo employees and partners who have access to the MarketoLive demo environment.",
-    "version": "5.4.25",
+    "version": "22.12.1",
     "background": {
-        "persistent": true,
-        "scripts": [
-            "background/background.js"
-        ]
+
+        "service_worker": "background/background.js"
+
     },
-    "browser_action": {
+    "action": {
         "default_popup": "popup/popup.html",
         "default_icon": "images/icon.png",
         "default_title": "MarketoLive"
@@ -109,38 +108,6 @@
             "run_at": "document_end"
         }
     ],
-    "externally_connectable": {
-        "matches": [
-            "*://marketolive.com/*",
-            "*://www.marketolive.com/*",
-            "*://dev.marketolive.com/*",
-            "*://verticals.marketolive.com/*",
-            "*://dev.verticals.marketolive.com/*",
-            "*://pages.marketolive.com/*",
-            "*://dev.pages.marketolive.com/*",
-            "https://adobe.okta.com/*",
-            "https://app-sjdemo1.marketo.com/*",
-            "https://app-sjp.marketo.com/*",
-            "https://engage-sj.marketo.com/*",
-            "https://engage-ab.marketo.com/*",
-            "https://app-sj11.marketo.com/*",
-            "https://na-sjdemo1.marketodesigner.com/*",
-            "https://na-sjp.marketodesigner.com/*",
-            "https://na-abdemo1.marketodesigner.com/*",
-            "https://na-sj11.marketodesigner.com/*",
-            "https://sjrtp3.marketo.com/*",
-            "https://sjrtp8.marketo.com/*",
-            "https://abrtp2.marketo.com/*",
-            "https://sjrtp1.marketo.com/*",
-            "https://sj-ee-api.marketo.com/*",
-            "https://sjrcademo1.marketo.com/*",
-            "https://abrcademo1.marketo.com/*",
-            "https://sjrca02.marketo.com/*",
-            "https://seo.marketo.com/*",
-            "https://250ok.com/*",
-            "https://toutapp.com/*"
-        ]
-    },
     "icons": {
         "16": "images/icon.png",
         "48": "images/icon.png",
@@ -150,36 +117,46 @@
         "management",
         "webRequest",
         "webRequestBlocking",
+        "activetab",
         "tabs",
         "cookies",
         "notifications",
         "browsingData",
-        "storage",
+        "scripting",
+        "storage"
+    ],
+    "optional_host_permissions": [
+
+
+    ],
+
+    "host_permissions": [
+
         "*://*.marketo.com/*",
         "*://*.marketodesigner.com/*",
         "*://pages.marketolive.com/*",
         "*://dev.pages.marketolive.com/*",
         "*://marketolive.com/*",
         "*://www.marketolive.com/*",
-        "*://dev.marketolive.com/*",
-        "*://verticals.marketolive.com/*",
-        "*://dev.verticals.marketolive.com/*",
-        "*://250ok.com/*",
-        "*://toutapp.com/*",
-        "*://adobe.okta.com/*",
-        "*://www.google.com.au/search?dynamicAd=true&*",
-        "*://www.google.de/search?dynamicAd=true&*",
-        "*://www.google.fr/search?dynamicAd=true&*",
-        "*://www.google.ie/search?dynamicAd=true&*",
-        "*://www.google.co.il/search?dynamicAd=true&*",
-        "*://www.google.co.jp/search?dynamicAd=true&*",
-        "*://www.google.co.uk/search?dynamicAd=true&*",
-        "*://www.google.com/search?dynamicAd=true&*",
-        "*://www.facebook.com/?dynamicAd=true&*",
-        "*://www.linkedin.com/feed/?dynamicAd=true&*"
+        "http://dev.marketolive.com/*",
+        "http://verticals.marketolive.com/*",
+        "http://dev.verticals.marketolive.com/*",
+        "http://250ok.com/*",
+        "http://toutapp.com/*",
+        "http://adobe.okta.com/*",
+        "http://www.google.com.au/search?dynamicAd=true&*",
+        "http://www.google.de/search?dynamicAd=true&*",
+        "http://www.google.fr/search?dynamicAd=true&*",
+        "http://www.google.ie/search?dynamicAd=true&*",
+        "http://www.google.co.il/search?dynamicAd=true&*",
+        "http://www.google.co.jp/search?dynamicAd=true&*",
+        "http://www.google.co.uk/search?dynamicAd=true&*",
+        "http://www.google.com/search?dynamicAd=true&*",
+        "http://www.facebook.com/?dynamicAd=true&*",
+        "http://www.linkedin.com/feed/?dynamicAd=true&*"
     ],
-    "content_security_policy": "script-src 'self' https://marketolive.com https://cdn.heapanalytics.com/js/heap-702959232.js https://cdn.heapanalytics.com/js/heap-2823746907.js; object-src 'self'",
-    "web_accessible_resources": [
-        "web-accessible-resources/*"
-    ]
+
+    "web_accessible_resources": [{
+        "matches": ["web-accessible-resources/*"]
+    }]
 }

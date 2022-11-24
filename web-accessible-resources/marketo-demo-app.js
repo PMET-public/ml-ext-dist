@@ -1,7 +1,6 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.25'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v22.12.1'; // version also automatically injected via gulp using manifest.json
 
-isExtDevMode = true
 console.log('Marketo Demo App > Running', MARKETO_EXT_VERSION)
 /**************************************************************************************
  *  This script contains all of the functionality needed for the manipulation of SC
@@ -167,7 +166,7 @@ APP.updateView = function () {
     LIB.overrideAnalyticsTiles()
   }
   if (LIB.isPropOfWindowObj('Mkt3.DL.dl.dlCompCode')) {
-   let currCompFragment = Mkt3.DL.dl.dlCompCode
+    currCompFragment = Mkt3.DL.dl.dlCompCode
     if (currCompFragment.search(mktoDesignersFragmentMatch) != -1) {
       console.log('Marketo Demo App > Location: Designers/Wizards')
       switch (currCompFragment) {

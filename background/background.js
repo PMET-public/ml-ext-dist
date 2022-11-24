@@ -1,44 +1,6 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v5.4.25'; // version also automatically injected via gulp using manifest.json
+window.MARKETO_EXT_VERSION = 'v22.12.1'; // version also automatically injected via gulp using manifest.json
 
-const filesInDirectory = dir => new Promise (resolve =>
-    dir.createReader ().readEntries (entries =>
-        Promise.all (entries.filter (e => e.name[0] !== '.').map (e =>
-            e.isDirectory
-                ? filesInDirectory (e)
-                : new Promise (resolve => e.file (resolve))
-        ))
-        .then (files => [].concat (...files))
-        .then (resolve)
-    )
-)
-
-const timestampForFilesInDirectory = dir =>
-        filesInDirectory (dir).then (files =>
-            files.map (f => f.name + f.lastModifiedDate).join ())
-
-const watchChanges = (dir, lastTimestamp) => {
-    timestampForFilesInDirectory (dir).then (timestamp => {
-        if (!lastTimestamp || (lastTimestamp === timestamp)) {
-            setTimeout (() => watchChanges (dir, timestamp), 1000) // retry after 1s
-        } else {
-            chrome.runtime.reload ()
-        }
-    })
-}
-
-chrome.management.getSelf (self => {
-    if (self.installType === 'development') {
-        chrome.runtime.getPackageDirectoryEntry (dir => watchChanges (dir))
-        chrome.tabs.query ({ active: true, lastFocusedWindow: true }, tabs => { // NB: see https://github.com/xpl/crx-hotreload/issues/5
-            if (tabs[0]) {
-                chrome.tabs.reload (tabs[0].id)
-            }
-        })
-    }
-})
-
-isExtDevMode = true
 // catch all for globally defined functions used by any file
 
 // the web accessible resources prefix needs to exist in the chrome extension context AND the window context
@@ -2837,21 +2799,14 @@ var LIB = {
       hiddenTile2 = container.querySelector('div[class="x-panel-bwrap x-panel"]'),
       performanceInsightsTile,
       emailInsightsTile,
-      dynamicchatTile,
       deliverabilityToolsTile
 
     hiddenTile1 && hiddenTile1.remove()
     hiddenTile2 && hiddenTile2.remove()
-    debugger
+
     for (let i = 0; i < tilesTextContainers.length; i++) {
       let tile = tilesTextContainers[i]
-      console.log('tile innerHTML'+tile.innerHTML,'tile txtcontent'+tile.textContent);
-  
       switch (tile.textContent) {
-        case 'Dynamic Chat':
-          console.log('LIB > Dynamicchat')
-          dynamicchatTile = tile.parentNode.parentNode.parentNode
-          dynamicchatTile.remove()
         case 'Performance Insights':
           performanceInsightsTile = tile.parentNode.parentNode.parentNode
           if (performanceInsightsTile.style.display == 'none') {
@@ -2862,7 +2817,6 @@ var LIB = {
           }
           break
         case 'Email Insights':
-          debugger
           if (!emailInsightsTile) {
             emailInsightsTile = tile.parentNode.parentNode.parentNode
             LIB.replaceLinkInElHTML(emailInsightsTile, LIB.mktoEmailInsightsLink)
@@ -3255,21 +3209,21 @@ var BACKGROUND_DATA_SCRIPT_LOCATION = 'https://marketolive.com/m3/pluginv3/backg
  *    urlCreate - URL to use when creating a new tab
  **************************************************************************************/
 
-function findAndReloadOrCreateTab(tabInfo) {
-  chrome.tabs.query( { url: tabInfo.urlMatch },
-    function (tabs) {
+async function findAndReloadOrCreateTab(tabInfo) {
+let [tabs] = await chrome.tabs.query( { url: tabInfo.urlMatch });
+   
       if (tabs.length > 0) {
         if (tabs[0].url == tabInfo.urlCreate) {
-          chrome.tabs.reload(tabs[0].id)
-          chrome.tabs.update(tabs[0].id, { active: true })
+         await chrome.tabs.reload(tabs[0].id)
+         await chrome.tabs.update(tabs[0].id, { active: true })
         } else {
-          chrome.tabs.update(tabs[0].id, { url: tabInfo.urlCreate, active: true })
+          await chrome.tabs.update(tabs[0].id, { url: tabInfo.urlCreate, active: true })
         }
       } else {
-        chrome.tabs.create({ url: tabInfo.urlCreate, active: true })
+        await chrome.tabs.create({ url: tabInfo.urlCreate, active: true })
       }
-    }
-  )
+    
+  
 }
 
 /**************************************************************************************
