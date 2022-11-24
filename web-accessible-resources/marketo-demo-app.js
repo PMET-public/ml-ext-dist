@@ -1,6 +1,4 @@
-// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-22.12.1; // version also automatically injected via gulp using manifest.json
-
+22.12.1
 console.log('Marketo Demo App > Running', MARKETO_EXT_VERSION)
 /**************************************************************************************
  *  This script contains all of the functionality needed for the manipulation of SC

@@ -1,6 +1,4 @@
-// DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-22.12.1; // version also automatically injected via gulp using manifest.json
-
+22.12.1
 // catch all for globally defined functions used by any file
 
 // the web accessible resources prefix needs to exist in the chrome extension context AND the window context
