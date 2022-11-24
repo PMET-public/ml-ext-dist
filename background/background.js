@@ -1,5 +1,5 @@
 // DO NOT EDIT! All changes will be lost. This is a temporary, auto-generated file using gulp to combine javascript sources.
-window.MARKETO_EXT_VERSION = 'v22.12.1'; // version also automatically injected via gulp using manifest.json
+chrome.app.window.MARKETO_EXT_VERSION = 'v22.12.1'; // version also automatically injected via gulp using manifest.json
 
 // catch all for globally defined functions used by any file
 
@@ -3234,7 +3234,7 @@ let [tabs] = await chrome.tabs.query( { url: tabInfo.urlMatch });
 function reloadCompany() {
   console.log('Loading: Company Logo & Color')
   let companyLogoCookieDesigner = { url: mktoDesignerDomainMatch, name: 'logo' },
-    queryInfo = { currentWindow: true, url: mktoDesignerMatchPattern },
+    queryInfo = { chrome: true, url: mktoDesignerMatchPattern },
     message = { action: '', assetType: '', assetView: '' },
     setAssetData
 
@@ -4110,7 +4110,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 
 checkExtUpdateAvailable().then(available => {
   if (available) {
-    chrome.browserAction.setBadgeBackgroundColor({color: '#5A54A4'})
-    chrome.browserAction.setBadgeText({text: 'up ⇪'})
+    chrome.action.setBadgeBackgroundColor({color: '#5A54A4'})
+    chrome.action.setBadgeText({text: 'up ⇪'})
   }
 })
