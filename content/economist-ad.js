@@ -3,12 +3,12 @@
 
 // the web accessible resources prefix needs to exist in the chrome extension context AND the window context
 // so injected scripts can access other scripts
-window.warPrefix
-if (typeof warPrefix === 'undefined' &&
+
+if (
   typeof chrome !== 'undefined' &&
   typeof chrome.runtime !== 'undefined' &&
   typeof chrome.runtime.getURL !== 'undefined') {
-  window.warPrefix = chrome.runtime.getURL('web-accessible-resources')
+  let warPrefix = await chrome.runtime.getURL('web-accessible-resources')
 
   // do not attempt to add this inline script to the extension background or popup page.
   // it's not allowed by Chrome's CSP and it's not needed b/c the warPrefix will be already be available
