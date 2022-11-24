@@ -157,6 +157,6 @@
     ],
 
     "web_accessible_resources": [{
-        "matches": ["web-accessible-resources/*"]
+        "resources": ["web-accessible-resources/*"]
     }]
 }
